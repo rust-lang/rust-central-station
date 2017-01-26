@@ -22,9 +22,11 @@ RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
 RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
+      --rev 84587f1c3d80558f5a8302c2c6d551f214395aab \
       --debug
 
 RUN git clone https://github.com/servo/homu /homu
+RUN cd /homu && git reset --hard d59f9f5095179a01682104f1374e23ec4212fee3
 RUN pip3 install -e /homu
 
 COPY tq /tmp/tq
