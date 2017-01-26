@@ -10,10 +10,14 @@ export RUST_BACKTRACE=1
 
 set -ex
 
+nginx -c /src/nginx.tmp.conf
+
 letsencrypt certonly \
     --webroot \
     -w /usr/share/nginx/html \
     -d `tq nginx.hostname < $secrets`
+
+nginx -s stop
 
 rbars $secrets /src/nginx.conf.template > /tmp/nginx.conf
 nginx -c /tmp/nginx.conf
