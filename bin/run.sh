@@ -5,6 +5,7 @@ set -e
 secrets=/src/secrets.toml
 
 /usr/sbin/rsyslogd
+cron
 
 export RUST_BACKTRACE=1
 

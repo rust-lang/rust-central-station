@@ -15,7 +15,8 @@ RUN apt-get update -y && \
       git \
       rsyslog \
       nginx \
-      letsencrypt
+      letsencrypt \
+      cron
 
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
@@ -30,6 +31,9 @@ COPY tq /tmp/tq
 RUN cargo install --path /tmp/tq
 COPY rbars /tmp/rbars
 RUN cargo install --path /tmp/rbars
+
+ADD crontab /etc/cron.d/letsencrypt-renew
+RUN touch /var/log/cron.log
 
 COPY bin/run.sh /
 ENTRYPOINT ["/run.sh"]
