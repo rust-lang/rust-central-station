@@ -13,7 +13,9 @@ RUN apt-get update -y && \
       python3-pip \
       python3-setuptools \
       git \
-      rsyslog
+      rsyslog \
+      nginx \
+      letsencrypt
 
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
@@ -30,4 +32,5 @@ COPY rbars /tmp/rbars
 RUN cargo install --path /tmp/rbars
 
 COPY bin/run.sh /
+COPY nginx.conf /tmp
 ENTRYPOINT ["/run.sh"]
