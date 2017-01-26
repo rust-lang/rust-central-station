@@ -38,10 +38,6 @@ http {
 
     add_header Strict-Transport-Security max-age=15768000;
 
-    ssl_stapling on;
-    ssl_stapling_verify on;
-    ssl_trusted_certificate /etc/ssl/private/ca-certs.pem;
-
     server_name  {{ nginx.hostname }};
 
     access_log  /var/log/nginx/{{ nginx.hostname }}.access.log;
