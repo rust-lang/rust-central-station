@@ -10,6 +10,11 @@ export RUST_BACKTRACE=1
 
 set -ex
 
+letsencrypt certonly \
+    --webroot \
+    -w /usr/share/nginx/html \
+    -d `tq nginx.hostname < $secrets`
+
 rbars $secrets /src/nginx.conf.template > /tmp/nginx.conf
 nginx -c /tmp/nginx.conf
 
@@ -30,11 +35,6 @@ cancelbot \
   --interval 60 \
   rust-lang/cargo \
   2>&1 | logger --tag cancelbot-cargo &
-
-letsencrypt certonly \
-    --webroot \
-    -w /usr/share/nginx/html \
-    -d `tq nginx.hostname < $secrets`
 
 rbars $secrets /src/homu.toml.template > /tmp/homu.toml
 homu -c /tmp/homu.toml 2>&1 | logger --tag homu
