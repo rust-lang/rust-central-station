@@ -17,7 +17,8 @@ letsencrypt certonly \
     --agree-tos \
     -m `tq nginx.email < $secrets` \
     -w /usr/share/nginx/html \
-    -d `tq nginx.hostname < $secrets`
+    -d `tq nginx.hostname < $secrets` \
+    --staging
 
 nginx -s stop
 
