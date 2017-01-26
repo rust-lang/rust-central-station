@@ -33,6 +33,7 @@ COPY rbars /tmp/rbars
 RUN cargo install --path /tmp/rbars
 
 ADD crontab /etc/cron.d/letsencrypt-renew
+RUN chmod 0644 /etc/cron.d/letsencrypt-renew
 RUN touch /var/log/cron.log
 
 COPY bin/run.sh /
