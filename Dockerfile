@@ -32,5 +32,4 @@ COPY rbars /tmp/rbars
 RUN cargo install --path /tmp/rbars
 
 COPY bin/run.sh /
-COPY nginx.conf /tmp
 ENTRYPOINT ["/run.sh"]

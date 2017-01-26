@@ -10,6 +10,7 @@ export RUST_BACKTRACE=1
 
 set -ex
 
+rbars $secrets /src/nginx.conf.template > /tmp/nginx.conf
 nginx -c /tmp/nginx.conf
 
 cancelbot \
@@ -31,12 +32,9 @@ cancelbot \
   2>&1 | logger --tag cancelbot-cargo &
 
 letsencrypt certonly \
-    --webroot -w /var/www/example \
-    -d example.com \
-    -d www.example.com \
-    -w /var/www/thing \
-    -d thing.is \
-    -d m.thing.is
+    --webroot \
+    -w /usr/share/nginx/html \
+    -d `tq nginx.hostname < $secrets`
 
 rbars $secrets /src/homu.toml.template > /tmp/homu.toml
 homu -c /tmp/homu.toml 2>&1 | logger --tag homu

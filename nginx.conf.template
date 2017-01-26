@@ -25,8 +25,8 @@ http {
   server {
     listen 443 ssl;
 
-    ssl_certificate /etc/letsencrypt/live/buildbot.rust-lang.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/buildbot.rust-lang.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ nginx.hostame }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ nginx.hostname }}/privkey.pem;
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
@@ -38,9 +38,9 @@ http {
     ssl_stapling_verify on;
     add_header Strict-Transport-Security max-age=15768000;
 
-    server_name  buildbot.rust-lang.org;
+    server_name  {{ nginx.hostname }};
 
-    access_log  /var/log/nginx/buildbot.rust-lang.org.access.log;
+    access_log  /var/log/nginx/{{ nginx.hostname }}.access.log;
 
     location /homu/ {
             proxy_pass   http://localhost:7942/;
@@ -54,7 +54,7 @@ http {
 
   server {
     listen 80;
-    server_name buildbot.rust-lang.org;
+    server_name {{ nginx.hostname }};
     return 301 https://$host$request_uri;
   }
 }
