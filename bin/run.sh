@@ -14,6 +14,8 @@ nginx -c /src/nginx.tmp.conf
 
 letsencrypt certonly \
     --webroot \
+    --agree-tos \
+    -m `tq nginx.email < $secrets` \
     -w /usr/share/nginx/html \
     -d `tq nginx.hostname < $secrets`
 
