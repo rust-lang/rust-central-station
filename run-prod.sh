@@ -9,4 +9,5 @@ exec docker run \
   --publish 80:80 \
   --publish 443:443 \
   --rm \
+  --detach \
   alexcrichton/rust-central-station
