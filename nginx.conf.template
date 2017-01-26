@@ -25,7 +25,7 @@ http {
   server {
     listen 443 ssl;
 
-    ssl_certificate /etc/letsencrypt/live/{{ nginx.hostame }}/fullchain.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ nginx.hostname }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ nginx.hostname }}/privkey.pem;
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
