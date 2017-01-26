@@ -2,15 +2,17 @@
 
 set -e
 
-source /src/secrets.sh
+secrets=/src/secrets.toml
 
 /usr/sbin/rsyslogd
 
 export RUST_BACKTRACE=1
 
+set -ex
+
 cancelbot \
-  --travis $travis_token \
-  --appveyor $rust_appveyor_token \
+  --travis `tq cancelbot.travis-token < $secrets` \
+  --appveyor `tq cancelbot.rust-appveyor-token < $secrets` \
   --appveyor-account rust-lang \
   --branch auto \
   --interval 60 \
@@ -18,12 +20,13 @@ cancelbot \
   2>&1 | logger --tag cancelbot-rust &
 
 cancelbot \
-  --travis $travis_token \
-  --appveyor $cargo_appveyor_token \
+  --travis `tq cancelbot.travis-token < $secrets` \
+  --appveyor `tq cancelbot.cargo-appveyor-token < $secrets` \
   --appveyor-account rust-lang-libs \
   --branch auto-cargo \
   --interval 60 \
   rust-lang/cargo \
   2>&1 | logger --tag cancelbot-cargo &
 
-sleep 3600
+rbars $secrets /src/homu.toml.template > /tmp/homu.toml
+homu -c /tmp/homu.toml

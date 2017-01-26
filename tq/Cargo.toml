@@ -1,0 +1,7 @@
+[package]
+name = "tq"
+version = "0.1.0"
+authors = ["Alex Crichton <alex@alexcrichton.com>"]
+
+[dependencies]
+toml = { version = "0.2", default-features = false }
