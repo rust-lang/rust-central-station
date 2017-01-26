@@ -9,5 +9,7 @@ docker build \
 
 exec docker run \
   --volume `pwd`:/src:ro \
+  --publish 80:80 \
+  --publish 443:443 \
   --rm \
   rust-central-station
