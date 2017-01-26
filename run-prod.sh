@@ -3,6 +3,7 @@
 set -ex
 
 docker pull alexcrichton/rust-central-station
+
 exec docker run \
   --volume `pwd`:/src:ro \
   --publish 80:80 \
