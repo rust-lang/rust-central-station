@@ -1,0 +1,11 @@
+[package]
+name = "promote-release"
+version = "0.1.0"
+authors = ["Alex Crichton <alex@alexcrichton.com>"]
+
+[dependencies]
+fs2 = "0.4"
+toml = "0.2"
+curl = "0.4"
+tar = "0.4"
+flate2 = "0.2"
