@@ -8,7 +8,7 @@ docker build \
   .
 
 exec docker run \
-  --volume `pwd`:/src:ro \
+  --volume `pwd`:/src \
   --publish 80:80 \
   --publish 443:443 \
   --rm \

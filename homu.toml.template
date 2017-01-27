@@ -1,3 +1,6 @@
+[db]
+file = '/src/main.db'
+
 [github]
 
 # Information for securely interacting with GitHub. These are found/generated
