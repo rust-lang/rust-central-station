@@ -21,7 +21,7 @@ local_git = true
 
 # SSH private key. Needed only when the local Git command is used
 ssh_key = """
-{{ homu.ssh.ssh_key }}
+{{ homu.ssh.ssh-key }}
 """
 
 [web]
