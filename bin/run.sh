@@ -50,4 +50,4 @@ cancelbot \
 
 # Configure and run homu
 rbars $secrets /src/homu.toml.template > /tmp/homu.toml
-homu -c /tmp/homu.toml 2>&1 | logger --tag homu
+homu -v -c /tmp/homu.toml 2>&1 | logger --tag homu
