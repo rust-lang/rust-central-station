@@ -16,7 +16,8 @@ RUN apt-get update -y && \
       rsyslog \
       nginx \
       letsencrypt \
-      cron
+      cron \
+      ssh
 
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
