@@ -1,1 +1,1 @@
-0 35 * * * * root letsencrypt renew 2>&1 | logger --tag letsencrypt-renew
+24 * * * * root letsencrypt renew 2>&1 | logger --tag letsencrypt-renew
