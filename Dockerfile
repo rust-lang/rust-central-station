@@ -38,5 +38,4 @@ ADD crontab /etc/cron.d/letsencrypt-renew
 RUN chmod 0644 /etc/cron.d/letsencrypt-renew
 RUN touch /var/log/cron.log
 
-COPY bin/run.sh /
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["/src/bin/run.sh"]

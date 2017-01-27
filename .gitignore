@@ -1,3 +1,4 @@
 secrets.toml
 target
 main.db
+letsencrypt
