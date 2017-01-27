@@ -1,4 +1,4 @@
 24 * * * * root letsencrypt renew 2>&1 | logger --tag letsencrypt-renew
 0 0 * * * root promote-release /tmp/nightly nightly /src/data/secrets.toml 2>&1 | logger --tag release-nightly
-20 0 * * * root promote-release /tmp/beta beta /src/data/secrets.toml 2>&1 | logger --tag release-beta
-40 0 * * * root promote-release /tmp/stable stable /src/data/secrets.toml 2>&1 | logger --tag release-stable
+20 * * * * root promote-release /tmp/beta beta /src/data/secrets.toml 2>&1 | logger --tag release-beta
+40 * * * * root promote-release /tmp/stable stable /src/data/secrets.toml 2>&1 | logger --tag release-stable
