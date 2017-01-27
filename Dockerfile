@@ -20,7 +20,8 @@ RUN apt-get update -y && \
       ssh \
       gnupg \
       s3cmd \
-      cmake
+      cmake \
+      logrotate
 
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
@@ -36,7 +37,7 @@ COPY tq /tmp/tq
 RUN cargo install --path /tmp/tq
 COPY rbars /tmp/rbars
 RUN cargo install --path /tmp/rbars
-COPY promote-release /tmp/rbars
+COPY promote-release /tmp/promote-release
 RUN cargo install --path /tmp/promote-release
 
 ADD crontab /etc/cron.d/letsencrypt-renew
