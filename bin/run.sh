@@ -48,6 +48,8 @@ cancelbot \
   rust-lang/cargo \
   2>&1 | logger --tag cancelbot-cargo &
 
+gpg --import `tq dist.gpg-key`
+
 # Configure and run homu
 rbars $secrets /src/homu.toml.template > /tmp/homu.toml
 homu -v -c /tmp/homu.toml 2>&1 | logger --tag homu
