@@ -12,7 +12,7 @@ export RUST_BACKTRACE=1
 set -ex
 
 # Generate an initial letsencrypt certificate if one isn't already available.
-if [ ! -d /etc/letsencrypt ]; then
+if [ ! -d /etc/letsencrypt/renewal ]; then
   nginx -c /src/nginx.tmp.conf
 
   letsencrypt certonly \
