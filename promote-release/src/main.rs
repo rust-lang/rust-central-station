@@ -243,11 +243,11 @@ upload-addr = \"{}\"
         t!(fs::create_dir_all(&dl));
 
         let src = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
-        run(Command::new("s3cmd")
-                    .arg("sync")
-                    .arg("--delete-removed")
-                    .arg(&src)
-                    .arg(format!("{}/", dl.display())));
+        run(self.s3cmd()
+                .arg("sync")
+                .arg("--delete-removed")
+                .arg(&src)
+                .arg(format!("{}/", dl.display())));
 
         let mut files = t!(dl.read_dir());
         if files.next().is_none() {
@@ -266,11 +266,11 @@ upload-addr = \"{}\"
 
     fn upload_signatures(&mut self, rev: &str) {
         let dst = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
-        run(Command::new("s3cmd")
-                    .arg("sync")
-                    .arg("-n")
-                    .arg(self.build_dir().join("build/dist/"))
-                    .arg(&dst));
+        run(self.s3cmd()
+                .arg("sync")
+                .arg("-n")
+                .arg(self.build_dir().join("build/dist/"))
+                .arg(&dst));
     }
 
     fn publish_archive(&mut self) {
@@ -279,11 +279,11 @@ upload-addr = \"{}\"
         let dir = self.secrets.lookup("dist.upload-dir").unwrap()
                               .as_str().unwrap();
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
-        run(Command::new("s3cmd")
-                    .arg("sync")
-                    .arg("-n")
-                    .arg(format!("{}/", self.dl_dir().display()))
-                    .arg(&dst));
+        run(self.s3cmd()
+                .arg("sync")
+                .arg("-n")
+                .arg(format!("{}/", self.dl_dir().display()))
+                .arg(&dst));
     }
 
     fn publish_release(&mut self) {
@@ -292,11 +292,11 @@ upload-addr = \"{}\"
         let dir = self.secrets.lookup("dist.upload-dir").unwrap()
                               .as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, dir);
-        run(Command::new("s3cmd")
-                    .arg("sync")
-                    .arg("-n")
-                    .arg(format!("{}/", self.dl_dir().display()))
-                    .arg(&dst));
+        run(self.s3cmd()
+                .arg("sync")
+                .arg("-n")
+                .arg(format!("{}/", self.dl_dir().display()))
+                .arg(&dst));
     }
 
     fn rust_dir(&self) -> PathBuf {
@@ -309,6 +309,17 @@ upload-addr = \"{}\"
 
     fn build_dir(&self) -> PathBuf {
         self.work.join("build")
+    }
+
+    fn s3cmd(&self) -> Command {
+        let access = self.secrets.lookup("dist.aws-access-key-id").unwrap()
+                                 .as_str().unwrap();
+        let secret = self.secrets.lookup("dist.aws-secret-key").unwrap()
+                                 .as_str().unwrap();
+        let mut cmd = Command::new("s3cmd");
+        cmd.env("AWS_ACCESS_KEY_ID", &access)
+           .env("AWS_SECRET_ACCESS_KEY", &secret);
+        return cmd
     }
 
     fn download_manifest(&mut self) -> toml::Value {
