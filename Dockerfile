@@ -27,7 +27,7 @@ RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
 RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
-      --rev 84587f1c3d80558f5a8302c2c6d551f214395aab
+      --rev 9fc5ae5c5f2db6162541c00365932561421b25f2
 
 RUN git clone https://github.com/servo/homu /homu
 RUN cd /homu && git reset --hard b82e98b628a2f8483f09b22ea75186b20b78cede
