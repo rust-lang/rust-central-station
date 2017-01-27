@@ -34,11 +34,11 @@ RUN cd /homu && git reset --hard b82e98b628a2f8483f09b22ea75186b20b78cede
 RUN pip3 install -e /homu
 
 COPY tq /tmp/tq
-RUN cargo install --path /tmp/tq
+RUN cargo install --path /tmp/tq && rm -rf /tmp/tq
 COPY rbars /tmp/rbars
-RUN cargo install --path /tmp/rbars
+RUN cargo install --path /tmp/rbars && rm -rf /tmp/rbars
 COPY promote-release /tmp/promote-release
-RUN cargo install --path /tmp/promote-release
+RUN cargo install --path /tmp/promote-release && rm -rf /tmp/promote-release
 
 ADD crontab /etc/cron.d/letsencrypt-renew
 RUN chmod 0644 /etc/cron.d/letsencrypt-renew
