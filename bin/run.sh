@@ -2,7 +2,7 @@
 
 set -e
 
-secrets=/src/secrets.toml
+secrets=/src/data/secrets.toml
 
 /usr/sbin/rsyslogd
 cron

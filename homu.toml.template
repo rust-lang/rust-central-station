@@ -1,5 +1,5 @@
 [db]
-file = '/src/main.db'
+file = '/src/data/main.db'
 
 [github]
 
