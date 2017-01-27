@@ -26,244 +26,150 @@ ssh_key = """
 
 [web]
 
-# The port homu listens on
+host = '127.0.0.1'
 port = 7942
 
-# An example configuration for repository (there can be many of these)
-[repo.rust]
-
-# github.com/<owner>/<name>
-owner = "rust-lang"
-name = "rust"
-
-# who has r+ rights?
-reviewers = [
-  "Aatch",
-  "BurntSushi",
-  "FlaPer87",
-  "GuillaumeGomez",
-  "Luqmana",
-  "Manishearth",
-  "alexcrichton",
-  "apasel422",
-  "arielb1",
-  "bkoropoff",
-  "bluss",
-  "bors",
-  "brson",
-  "bstrie",
-  "cmr",
-  "dotdash",
-  "eddyb",
-  "erickt",
-  "frewsxcv",
-  "huonw",
-  "japaric",
-  "jdm",
-  "jonathandturner",
-  "jroesch",
-  "jseyfried",
-  "kballard",
-  "kimundi",
-  "kmcallister",
-  "michaelwoerister",
-  "nikomatsakis",
-  "nrc",
-  "pcwalton",
-  "petrochenkov",
-  "pnkfelix",
-  "sanxiyn",
-  "sfackler",
-  "steveklabnik",
-  "vadimcn",
-  "aturon",
-]
-
-# who has 'try' rights? (try, retry, force, clean, prioritization)
-try_users = []
-
-# Keep the commit history linear. Requires the local Git command
-#linear = false
-
-# Auto-squash commits. Requires the local Git command
-#autosquash = true
-
-## branch names (these settings here are the defaults)
-#[repo.NAME.branch]
+#[repo.rust]
+#owner = "rust-lang"
+#name = "rust"
 #
+## who has r+ rights?
+#reviewers = [
+#  "Aatch",
+#  "BurntSushi",
+#  "FlaPer87",
+#  "GuillaumeGomez",
+#  "Luqmana",
+#  "Manishearth",
+#  "alexcrichton",
+#  "apasel422",
+#  "arielb1",
+#  "bkoropoff",
+#  "bluss",
+#  "bors",
+#  "brson",
+#  "bstrie",
+#  "cmr",
+#  "dotdash",
+#  "eddyb",
+#  "erickt",
+#  "frewsxcv",
+#  "huonw",
+#  "japaric",
+#  "jdm",
+#  "jonathandturner",
+#  "jroesch",
+#  "jseyfried",
+#  "kballard",
+#  "kimundi",
+#  "kmcallister",
+#  "michaelwoerister",
+#  "nikomatsakis",
+#  "nrc",
+#  "pcwalton",
+#  "petrochenkov",
+#  "pnkfelix",
+#  "sanxiyn",
+#  "sfackler",
+#  "steveklabnik",
+#  "vadimcn",
+#  "aturon",
+#]
+#
+## who has 'try' rights? (try, retry, force, clean, prioritization)
+#try_users = []
+#
+#[repo.rust.github]
+#secret = "{{ homu.repo-secrets.rust }}"
+#[repo.rust.status.travis]
+#context = "continuous-integration/travis-ci/push"
+#[repo.rust.status.appveyor]
+#context = "continuous-integration/appveyor/branch"
+#
+#
+#[repo.cargo]
+#owner = "rust-lang"
+#name = "cargo"
+#reviewers = [
+#  "brson",
+#  "alexcrichton",
+#  "wycats",
+#  "carllerche",
+#  "huonw",
+#  "steveklabnik",
+#]
+#try_users = []
+#[repo.cargo.branch]
+#auto = "auto-cargo"
+#[repo.cargo.github]
+#secret = "{{ homu.repo-secrets.cargo }}"
+#[repo.cargo.status.travis]
+#context = "continuous-integration/travis-ci/push"
+#[repo.cargo.status.appveyor]
+#context = "continuous-integration/appveyor/branch"
+#
+#[repo.libc]
+#owner = "rust-lang"
+#name = "libc"
+#reviewers = [
+#  "brson",
+#  "alexcrichton",
+#]
+#try_users = []
+#
+#[repo.libc.branch]
+#auto = "auto-libc"
+#
+#[repo.libc.github]
+#secret = "${homu_libc_github_secret}"
+#
+#[repo.libc.status.travis]
+#context = "continuous-integration/travis-ci/push"
+#[repo.libc.status.appveyor]
+#context = "continuous-integration/appveyor/branch"
+#
+#[repo.rustup-rs]
+#owner = "rust-lang-nursery"
+#name = "rustup.rs"
+#reviewers = [
+#  "brson",
+#  "alexcrichton",
+#  "Diggsey",
+#]
+#try_users = []
+#
+#[repo.rustup-rs.branch]
 #auto = "auto"
-#try = "try"
-#rollup = "rollup"
-
-[repo.rust.github]
-
-# arbitrary secret (e.g. openssl rand -hex 20)
-secret = "{{ homu.repo-secrets.rust }}"
-
-[repo.rust.status.travis]
-context = "continuous-integration/travis-ci/push"
-
-[repo.rust.status.appveyor]
-context = "continuous-integration/appveyor/branch"
-
-# ======================================================================
-
-## Use buildbot for running tests
-#[repo.rust.buildbot]
 #
-#url = "https://buildbot.rust-lang.org"
-#secret = "..."
+#[repo.rustup-rs.github]
+#secret = "{{ homu.repo-secrets.rustup }}"
 #
-#builders = [
-#        "auto-linux-32-nopt-t",
-#        "auto-linux-32-opt",
-#        #"auto-linux-32cross-opt",
-#        "auto-linux-64-cargotest",
-#        #"auto-linux-64-cross-armhf",
-#        #"auto-linux-64-cross-armsf",
-#        "auto-linux-64-cross-freebsd",
-#        #"auto-linux-64-cross-netbsd",
-#        "auto-linux-64-debug-opt",
-#        "auto-linux-64-nopt-t",
-#        "auto-linux-64-opt",
-#        #"auto-linux-64-opt-no-mir",
-#        "auto-linux-64-opt-rustbuild",
-#        "auto-linux-64-x-android-t",
-#        "auto-linux-cross-opt",
-#        "auto-linux-musl-64-opt",
+#[repo.rustup-rs.status.travis]
+#context = "continuous-integration/travis-ci/push"
+#[repo.rustup-rs.status.appveyor]
+#context = "continuous-integration/appveyor/branch"
 #
-#        "auto-mac-32-opt",
-#        #"auto-mac-64-nopt-t",
-#        "auto-mac-64-opt",
-#        "auto-mac-64-opt-rustbuild",
-#        "auto-mac-cross-ios-opt",
-#
-#        #"auto-win-gnu-32-nopt-t",
-#        "auto-win-gnu-32-opt",
-#        "auto-win-gnu-32-opt-rustbuild",
-#        #"auto-win-gnu-64-nopt-t",
-#        "auto-win-gnu-64-opt",
-#        #"auto-win-msvc-32-cross-opt",
-#        "auto-win-msvc-32-opt",
-#        "auto-win-msvc-64-cargotest",
-#        "auto-win-msvc-64-opt",
-#        #"auto-win-msvc-64-opt-no-mir",
-#        "auto-win-msvc-64-opt-rustbuild",
+#[repo.compiler-builtins]
+#owner = "rust-lang-nursery"
+#name = "compiler-builtins"
+#reviewers = [
+#  "brson",
+#  "alexcrichton",
+#  "japaric",
+#  "Amanieu",
 #]
-#try_builders = [
-#        "try-bsd",
-#        "try-linux",
-#        "try-mac",
-#        "try-win-gnu-32",
-#        "try-win-gnu-64",
-#]
+#try_users = []
 #
-#username = "any-build"
-#password = "..."
-
-# ======================================================================
-
-# Use travis for running tests
-#[repo.NAME.travis]
-
-# found under <https://travis-ci.org/profile/info>.
-#token = ""
-
-## Use the Status API
-#[repo.NAME.status.LABEL]
+#[repo.compiler-builtins.branch]
+#auto = "auto"
 #
-## String label set by status updates
-#context = ""
-
-[repo.cargo]
-owner = "rust-lang"
-name = "cargo"
-
-reviewers = [
-  "brson",
-  "alexcrichton",
-  "wycats",
-  "carllerche",
-  "huonw",
-  "steveklabnik",
-]
-
-try_users = []
-
-[repo.cargo.branch]
-auto = "auto-cargo"
-
-[repo.cargo.github]
-secret = "{{ homu.repo-secrets.cargo }}"
-
-[repo.cargo.status.travis]
-context = "continuous-integration/travis-ci/push"
-
-[repo.cargo.status.appveyor]
-context = "continuous-integration/appveyor/branch"
-
-[repo.libc]
-owner = "rust-lang"
-name = "libc"
-reviewers = [
-  "brson",
-  "alexcrichton",
-]
-try_users = []
-
-[repo.libc.branch]
-auto = "auto-libc"
-
-[repo.libc.github]
-secret = "${homu_libc_github_secret}"
-
-[repo.libc.status.travis]
-context = "continuous-integration/travis-ci/push"
-[repo.libc.status.appveyor]
-context = "continuous-integration/appveyor/branch"
-
-[repo.rustup-rs]
-owner = "rust-lang-nursery"
-name = "rustup.rs"
-reviewers = [
-  "brson",
-  "alexcrichton",
-  "Diggsey",
-]
-try_users = []
-
-[repo.rustup-rs.branch]
-auto = "auto"
-
-[repo.rustup-rs.github]
-secret = "{{ homu.repo-secrets.rustup }}"
-
-[repo.rustup-rs.status.travis]
-context = "continuous-integration/travis-ci/push"
-[repo.rustup-rs.status.appveyor]
-context = "continuous-integration/appveyor/branch"
-
-[repo.compiler-builtins]
-owner = "rust-lang-nursery"
-name = "compiler-builtins"
-reviewers = [
-  "brson",
-  "alexcrichton",
-  "japaric",
-  "Amanieu",
-]
-try_users = []
-
-[repo.compiler-builtins.branch]
-auto = "auto"
-
-[repo.compiler-builtins.github]
-secret = "{{ homu.repo-secrets.compiler-builtins }}"
-
-[repo.compiler-builtins.status.travis]
-context = "continuous-integration/travis-ci/push"
-[repo.compiler-builtins.status.appveyor]
-context = "continuous-integration/appveyor/branch"
+#[repo.compiler-builtins.github]
+#secret = "{{ homu.repo-secrets.compiler-builtins }}"
+#
+#[repo.compiler-builtins.status.travis]
+#context = "continuous-integration/travis-ci/push"
+#[repo.compiler-builtins.status.appveyor]
+#context = "continuous-integration/appveyor/branch"
 
 
 [repo.regex]
