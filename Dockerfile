@@ -38,6 +38,6 @@ RUN cargo install --path /tmp/rbars
 ADD crontab /etc/cron.d/letsencrypt-renew
 RUN chmod 0644 /etc/cron.d/letsencrypt-renew
 RUN touch /var/log/cron.log
-RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN mkdir /root/.ssh && ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 ENTRYPOINT ["/src/bin/run.sh"]
