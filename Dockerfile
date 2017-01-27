@@ -26,7 +26,7 @@ RUN cargo install \
       --debug
 
 RUN git clone https://github.com/servo/homu /homu
-RUN cd /homu && git reset --hard d59f9f5095179a01682104f1374e23ec4212fee3
+RUN cd /homu && git reset --hard b82e98b628a2f8483f09b22ea75186b20b78cede
 RUN pip3 install -e /homu
 
 COPY tq /tmp/tq
