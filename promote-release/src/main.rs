@@ -28,6 +28,9 @@ struct Context {
     date: String,
 }
 
+// Called as:
+//
+//  $prog work/dir release-channel path/to/secrets.toml
 fn main() {
     let mut secrets = String::new();
     t!(t!(File::open(env::args().nth(3).unwrap())).read_to_string(&mut secrets));
@@ -54,6 +57,9 @@ impl Context {
         self.do_release(branch);
     }
 
+    /// Locks execution of concurrent invocations of this script in case one
+    /// takes a long time to run. The call to `try_lock_exclusive` will fail if
+    /// the lock is held already
     fn lock(&mut self) -> File {
         t!(fs::create_dir_all(&self.work));
         let file = t!(OpenOptions::new()
@@ -65,6 +71,8 @@ impl Context {
         file
     }
 
+    /// Update the rust repository we have cached, either cloning a fresh one or
+    /// fetching remote references
     fn update_repo(&mut self) {
         // Clone/update the repo
         let dir = self.rust_dir();
@@ -83,7 +91,10 @@ impl Context {
         }
     }
 
+    /// Does a release for the `branch` specified.
     fn do_release(&mut self, branch: &str) {
+        // Learn the precise rev of the remote branch, this'll guide what we
+        // download.
         let rev = output(Command::new("git")
                                  .arg("rev-parse")
                                  .arg(format!("origin/{}", branch))
@@ -91,8 +102,8 @@ impl Context {
         let rev = rev.trim();
         println!("{} rev is {}", self.release, rev);
 
-        self.configure_rust(rev);
-
+        // Download the current live manifest for the channel we're releasing.
+        // Through that we learn the current version of the release.
         let manifest = self.download_manifest();
         let previous_version = manifest.lookup("pkg.rust.version")
                                        .expect("rust version not present")
@@ -100,26 +111,45 @@ impl Context {
                                        .expect("rust version not a string");
         println!("previous version: {}", previous_version);
 
+        // If the previously released version is the same rev, then there's
+        // nothing for us to do, nothing has changed.
         if previous_version.contains(&rev[..7]) && false {
             return println!("found rev in previous version, skipping");
         }
 
+        // We may still not do a release if the version number hasn't changed.
+        // To learn about the current branch's version number we download
+        // artifacts and look inside.
+        //
+        // If revisions of the current release and the current branch are
+        // different and the versions are the same then there's nothing for us
+        // to do. This represents a scenario where changes have been merged to
+        // the stable/beta branch but the version bump hasn't happened yet.
         self.download_artifacts(&rev);
-
-        if !self.version_changed_since(&previous_version) {
+        if self.current_version_same(&previous_version) {
             return println!("version hasn't changed, skipping");
         }
 
+        // Ok we've now determined that a release needs to be done. Let's
+        // configure rust, sign the artifacts we just downloaded, and upload the
+        // signatures to the CI bucket.
+        self.configure_rust(rev);
         self.sign_artifacts();
         self.upload_signatures(&rev);
 
+        // Merge all the signatures with the download files, and then sync that
+        // whole dir up to the release archives
         for file in t!(self.build_dir().join("build/dist/").read_dir()) {
             let file = t!(file);
             t!(fs::copy(file.path(), self.dl_dir().join(file.file_name())));
         }
-
         self.publish_archive();
-        self.publish_release();
+
+        // If we're not a stable release, then we publish everything. For stable
+        // we wait for a manual trigger to do the release
+        if self.release != "stable" {
+            self.publish_release();
+        }
     }
 
     fn configure_rust(&mut self, rev: &str) {
@@ -150,10 +180,10 @@ upload-addr = \"{}\"
                         .as_str().unwrap()).as_bytes()));
     }
 
-    fn version_changed_since(&mut self, prev: &str) -> bool {
+    fn current_version_same(&mut self, prev: &str) -> bool {
         // nightly's always changing
         if self.release == "nightly" {
-            return true
+            return false
         }
         let prev_version = prev.split(' ').next().unwrap();
 
@@ -189,7 +219,23 @@ upload-addr = \"{}\"
 
         let current_version = current.split(' ').next().unwrap();
 
-        prev_version != current_version
+        // The release process for beta looks like so:
+        //
+        // * Force push master branch to beta branch
+        // * Send a PR to beta, updating release channel
+        //
+        // In the window between these two steps we don't actually have release
+        // artifacts but this script may be run. Try to detect that case here if
+        // the versions mismatch and panic. We'll try again later once that PR
+        // has merged and everything should look good.
+        if (current.contains("nightly") && !prev.contains("nightly")) ||
+           (current.contains("beta") && !prev.contains("beta")) {
+            panic!("looks like channels are being switched -- was this branch \
+                    just created and has a pending PR to change the release \
+                    channel?");
+        }
+
+        prev_version == current_version
     }
 
     fn download_artifacts(&mut self, rev: &str) {
@@ -230,7 +276,9 @@ upload-addr = \"{}\"
     fn publish_archive(&mut self) {
         let bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
                                  .as_str().unwrap();
-        let dst = format!("s3://{}/dist/{}/", bucket, self.date);
+        let dir = self.secrets.lookup("dist.upload-dir").unwrap()
+                              .as_str().unwrap();
+        let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
         run(Command::new("s3cmd")
                     .arg("sync")
                     .arg("-n")
@@ -241,7 +289,9 @@ upload-addr = \"{}\"
     fn publish_release(&mut self) {
         let bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
                                  .as_str().unwrap();
-        let dst = format!("s3://{}/{}/", bucket, self.date);
+        let dir = self.secrets.lookup("dist.upload-dir").unwrap()
+                              .as_str().unwrap();
+        let dst = format!("s3://{}/{}/", bucket, dir);
         run(Command::new("s3cmd")
                     .arg("sync")
                     .arg("-n")

@@ -17,14 +17,16 @@ RUN apt-get update -y && \
       nginx \
       letsencrypt \
       cron \
-      ssh
+      ssh \
+      gnupg \
+      s3cmd \
+      cmake
 
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
 RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
-      --rev 84587f1c3d80558f5a8302c2c6d551f214395aab \
-      --debug
+      --rev 84587f1c3d80558f5a8302c2c6d551f214395aab
 
 RUN git clone https://github.com/servo/homu /homu
 RUN cd /homu && git reset --hard b82e98b628a2f8483f09b22ea75186b20b78cede
@@ -34,6 +36,8 @@ COPY tq /tmp/tq
 RUN cargo install --path /tmp/tq
 COPY rbars /tmp/rbars
 RUN cargo install --path /tmp/rbars
+COPY promote-release /tmp/rbars
+RUN cargo install --path /tmp/promote-release
 
 ADD crontab /etc/cron.d/letsencrypt-renew
 RUN chmod 0644 /etc/cron.d/letsencrypt-renew
