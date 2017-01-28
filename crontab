@@ -1,3 +1,5 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/bin
+
 # renewing ssl certs
 24 * * * * root letsencrypt renew 2>&1 | logger --tag letsencrypt-renew
 
