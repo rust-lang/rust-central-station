@@ -21,7 +21,8 @@ RUN apt-get update -y && \
       gnupg \
       s3cmd \
       cmake \
-      logrotate
+      logrotate \
+      file
 
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
