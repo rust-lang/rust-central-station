@@ -40,7 +40,7 @@ fn main() {
         release: env::args().nth(2).unwrap(),
         secrets: t!(secrets.parse()),
         handle: Easy::new(),
-        date: output(Command::new("date").arg("+%Y-%m-%d")),
+        date: output(Command::new("date").arg("+%Y-%m-%d")).trim().to_string(),
     }.run()
 }
 
