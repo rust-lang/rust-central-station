@@ -41,6 +41,9 @@ RUN cargo install --path /tmp/rbars && rm -rf /tmp/rbars
 COPY promote-release /tmp/promote-release
 RUN cargo install --path /tmp/promote-release && rm -rf /tmp/promote-release
 
+RUN pip3 install awscli
+RUN aws configure set preview.cloudfront true
+
 ADD crontab /etc/cron.d/letsencrypt-renew
 RUN chmod 0644 /etc/cron.d/letsencrypt-renew
 RUN touch /var/log/cron.log

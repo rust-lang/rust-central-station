@@ -1,8 +1,12 @@
-extern crate fs2;
-extern crate toml;
 extern crate curl;
-extern crate tar;
 extern crate flate2;
+extern crate fs2;
+extern crate rand;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
+extern crate tar;
+extern crate toml;
 
 use std::env;
 use std::fs::{self, File, OpenOptions};
@@ -150,6 +154,8 @@ impl Context {
         if self.release != "stable" {
             self.publish_release();
         }
+
+        self.invalidate_cloudfront();
     }
 
     fn configure_rust(&mut self, rev: &str) {
@@ -297,6 +303,49 @@ upload-addr = \"{}\"
                 .arg(&dst));
     }
 
+    fn invalidate_cloudfront(&mut self) {
+        #[derive(Serialize)]
+        struct InvalidationBatch {
+            #[serde(rename = "Paths")]
+            paths: InvalidationPaths,
+            #[serde(rename = "CallerReference")]
+            reference: String,
+        }
+
+        #[derive(Serialize)]
+        struct InvalidationPaths {
+            #[serde(rename = "Items")]
+            items: Vec<String>,
+            #[serde(rename = "Quantity")]
+            quantity: usize,
+        }
+
+        let batch = InvalidationBatch {
+            paths: InvalidationPaths {
+                items: vec![
+                    "cargo-dist/channel*".to_string(),
+                    "cargo-dist/cargo*".to_string(),
+                    "dist/channel*".to_string(),
+                    "dist/rust*".to_string(),
+                ],
+                quantity: 4,
+            },
+            reference: format!("rct-{}", rand::random::<usize>()),
+        };
+        let json = t!(serde_json::to_string(&batch));
+        let dst = self.work.join("payload.json");
+        t!(t!(File::create(&dst)).write_all(json.as_bytes()));
+
+        let distribution_id = self.secrets.lookup("dist.cloudfront-distribution-id").unwrap()
+                                          .as_str().unwrap();
+        let mut cmd = Command::new("aws");
+        self.aws_creds(&mut cmd);
+        run(cmd.arg("cloudfront")
+               .arg("create-invalidation")
+               .arg("--invalidation-batch").arg(&dst)
+               .arg("--distribution-id").arg(distribution_id));
+    }
+
     fn rust_dir(&self) -> PathBuf {
         self.work.join("rust")
     }
@@ -310,14 +359,18 @@ upload-addr = \"{}\"
     }
 
     fn s3cmd(&self) -> Command {
+        let mut cmd = Command::new("s3cmd");
+        self.aws_creds(&mut cmd);
+        return cmd
+    }
+
+    fn aws_creds(&self, cmd: &mut Command) {
         let access = self.secrets.lookup("dist.aws-access-key-id").unwrap()
                                  .as_str().unwrap();
         let secret = self.secrets.lookup("dist.aws-secret-key").unwrap()
                                  .as_str().unwrap();
-        let mut cmd = Command::new("s3cmd");
         cmd.env("AWS_ACCESS_KEY_ID", &access)
            .env("AWS_SECRET_ACCESS_KEY", &secret);
-        return cmd
     }
 
     fn download_manifest(&mut self) -> toml::Value {
