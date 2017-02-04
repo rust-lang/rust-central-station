@@ -342,7 +342,7 @@ upload-addr = \"{}\"
         self.aws_creds(&mut cmd);
         run(cmd.arg("cloudfront")
                .arg("create-invalidation")
-               .arg("--invalidation-batch").arg(&dst)
+               .arg("--invalidation-batch").arg(format!("file://{}", dst.display()))
                .arg("--distribution-id").arg(distribution_id));
     }
 
