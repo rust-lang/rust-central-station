@@ -298,7 +298,6 @@ upload-addr = \"{}\"
         let dst = format!("s3://{}/{}/", bucket, dir);
         run(self.s3cmd()
                 .arg("sync")
-                .arg("-n")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -323,10 +322,10 @@ upload-addr = \"{}\"
         let batch = InvalidationBatch {
             paths: InvalidationPaths {
                 items: vec![
-                    "cargo-dist/channel*".to_string(),
-                    "cargo-dist/cargo*".to_string(),
-                    "dist/channel*".to_string(),
-                    "dist/rust*".to_string(),
+                    "/cargo-dist/channel*".to_string(),
+                    "/cargo-dist/cargo*".to_string(),
+                    "/dist/channel*".to_string(),
+                    "/dist/rust*".to_string(),
                 ],
                 quantity: 4,
             },
