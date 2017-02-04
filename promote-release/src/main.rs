@@ -268,7 +268,6 @@ upload-addr = \"{}\"
         let dst = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
         run(self.s3cmd()
                 .arg("sync")
-                .arg("-n")
                 .arg(self.build_dir().join("build/dist/"))
                 .arg(&dst));
     }
@@ -281,7 +280,6 @@ upload-addr = \"{}\"
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
         run(self.s3cmd()
                 .arg("sync")
-                .arg("-n")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
