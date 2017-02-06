@@ -155,6 +155,7 @@ impl Context {
             self.publish_release();
         }
 
+        self.update_dist_index();
         self.invalidate_cloudfront();
     }
 
@@ -299,6 +300,76 @@ upload-addr = \"{}\"
         run(self.s3cmd()
                 .arg("sync")
                 .arg(format!("{}/", self.dl_dir().display()))
+                .arg(&dst));
+    }
+
+    fn update_dist_index(&mut self) {
+        // cp config.toml-dist config.toml -f
+        // python3 generate.py
+        let dir = self.work.join("update-dist-index");
+        drop(fs::remove_dir_all(&dir));
+        t!(fs::create_dir_all(&dir));
+
+        let config = self.work.join("s3-directory-listing.toml");
+
+        t!(t!(File::create(&config)).write_all(format!("
+[bucket]
+# Must be specified:
+name   = '{bucket}'
+region = '{region}'
+access_key = '{access_key}'
+secret_key = '{secret_key}'
+
+# Optional (default values listed):
+prefix = '{upload_dir}'
+path_separator = '/'
+base_url = ''
+
+[output.webindex]
+type = 'html'
+extra_head = ''
+list_zero_sized = false
+file_sort_key = 'name'
+reverse_files = false
+
+[output.macinereadable1]
+type = 'json'
+pretty = true
+
+[output.delimitedvalues]
+type = 'txt'
+delimiter = ','
+file_fields = ['path', 'size', 'mdate']
+filename = 'index.txt'
+
+",
+      	bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
+                             .as_str().unwrap(),
+      	region = self.secrets.lookup("dist.upload-bucket-region").unwrap()
+                             .as_str().unwrap(),
+      	upload_dir = self.secrets.lookup("dist.upload-dir").unwrap()
+                                 .as_str().unwrap(),
+        access_key = self.secrets.lookup("dist.aws-access-key-id").unwrap()
+                                 .as_str().unwrap(),
+        secret_key = self.secrets.lookup("dist.aws-secret-key").unwrap()
+                                 .as_str().unwrap(),
+).as_bytes()));
+
+        run(Command::new("python3")
+                    .arg("/s3-directory-listing/generate.py")
+                    .arg("--output").arg(&dir)
+                    .arg(&config));
+        t!(fs::rename(dir.join("index.json"), dir.join("dist/index.json")));
+        t!(fs::rename(dir.join("index.txt"), dir.join("dist/index.txt")));
+
+        let bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
+                                 .as_str().unwrap();
+        let upload_dir = self.secrets.lookup("dist.upload-dir").unwrap()
+                                     .as_str().unwrap();
+        let dst = format!("s3://{}/{}/", bucket, upload_dir);
+        run(self.s3cmd()
+                .arg("sync")
+                .arg(format!("{}/", dir.display()))
                 .arg(&dst));
     }
 
