@@ -374,8 +374,15 @@ upload-addr = \"{}\"
 
     fn download_manifest(&mut self) -> toml::Value {
         t!(self.handle.get(true));
-        let url = format!("https://static.rust-lang.org/dist/channel-rust-{}.toml",
+        let addr = self.secrets.lookup("dist.upload-addr").unwrap()
+                               .as_str().unwrap();
+        let upload_dir = self.secrets.lookup("dist.upload-dir").unwrap()
+                                     .as_str().unwrap();
+        let url = format!("{}/{}/channel-rust-{}.toml",
+                          addr,
+                          upload_dir,
                           self.release);
+        println!("downloading manifest from: {}", url);
         t!(self.handle.url(&url));
         let mut result = Vec::new();
         {
