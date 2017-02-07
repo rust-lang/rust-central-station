@@ -8,6 +8,7 @@ exec docker run \
   --volume `pwd`:/src:ro \
   --volume `pwd`/data:/src/data \
   --volume `pwd`/data/letsencrypt:/etc/letsencrypt \
+  --volume /var/log:/var/log \
   --publish 80:80 \
   --publish 443:443 \
   --rm \
