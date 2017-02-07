@@ -44,9 +44,8 @@ RUN cargo install --path /tmp/promote-release && rm -rf /tmp/promote-release
 RUN pip3 install awscli
 RUN aws configure set preview.cloudfront true
 
-RUN git clone https://github.com/brson/s3-directory-listing \
-      /s3-directory-listing \
-      --rev 1dc88c6b0f6c4df470d35d1c212ee65147926064
+RUN git clone https://github.com/brson/s3-directory-listing /s3-directory-listing
+RUN cd /s3-directory-listing && git reset --hard 1dc88c6b0f6c4df470d35d1c212ee65147926064
 
 ADD crontab /etc/cron.d/letsencrypt-renew
 RUN chmod 0644 /etc/cron.d/letsencrypt-renew
