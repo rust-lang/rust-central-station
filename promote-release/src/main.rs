@@ -369,7 +369,7 @@ filename = 'index.txt'
         let dst = format!("s3://{}/{}/", bucket, upload_dir);
         run(self.s3cmd()
                 .arg("sync")
-                .arg(format!("{}/", dir.display()))
+                .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
     }
 
