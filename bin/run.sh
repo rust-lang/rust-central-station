@@ -4,6 +4,7 @@ set -e
 
 secrets=/src/data/secrets.toml
 
+chown root:syslog /var/log
 /usr/sbin/rsyslogd
 cron
 
