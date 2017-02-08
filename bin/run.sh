@@ -4,7 +4,12 @@ set -e
 
 secrets=/src/data/secrets.toml
 
+# We mounted /var/log from a local log dir, but ubuntu expects it to be owned by
+# root:syslog, so change it here
 chown root:syslog /var/log
+touch /var/log/cron.log
+
+# Background daemons we use here
 /usr/sbin/rsyslogd
 cron
 
@@ -30,6 +35,7 @@ fi
 rbars $secrets /src/nginx.conf.template > /tmp/nginx.conf
 nginx -c /tmp/nginx.conf
 
+# Import the GPG key that's specified in the secrets file
 gpg --import `tq dist.gpg-key < $secrets`
 
 # Configure and run homu
