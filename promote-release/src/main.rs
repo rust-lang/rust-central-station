@@ -380,13 +380,11 @@ filename = 'index.txt'
         let batch = InvalidationBatch {
             paths: InvalidationPaths {
                 items: vec![
-                    "/cargo-dist/channel*".to_string(),
-                    "/cargo-dist/cargo*".to_string(),
                     "/dist/channel*".to_string(),
                     "/dist/rust*".to_string(),
                     "/dist/index*".to_string(),
                 ],
-                quantity: 5,
+                quantity: 3,
             },
             reference: format!("rct-{}", rand::random::<usize>()),
         };
