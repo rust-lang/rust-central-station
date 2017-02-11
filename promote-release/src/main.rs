@@ -117,7 +117,7 @@ impl Context {
 
         // If the previously released version is the same rev, then there's
         // nothing for us to do, nothing has changed.
-        if previous_version.contains(&rev[..7]) && false {
+        if previous_version.contains(&rev[..7]) {
             return println!("found rev in previous version, skipping");
         }
 
@@ -178,12 +178,14 @@ impl Context {
 [dist]
 sign-folder = \"{}\"
 gpg-password-file = \"{}\"
-upload-addr = \"{}\"
+upload-addr = \"{}/{}\"
 ",
             self.dl_dir().display(),
             self.secrets.lookup("dist.gpg-password-file").unwrap()
                         .as_str().unwrap(),
             self.secrets.lookup("dist.upload-addr").unwrap()
+                        .as_str().unwrap(),
+            self.secrets.lookup("dist.upload-dir").unwrap()
                         .as_str().unwrap()).as_bytes()));
     }
 
