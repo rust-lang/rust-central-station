@@ -109,8 +109,7 @@ impl Context {
         // Download the current live manifest for the channel we're releasing.
         // Through that we learn the current version of the release.
         let manifest = self.download_manifest();
-        let previous_version = manifest.lookup("pkg.rust.version")
-                                       .expect("rust version not present")
+        let previous_version = manifest["pkg"]["rust"]["version"]
                                        .as_str()
                                        .expect("rust version not a string");
         println!("previous version: {}", previous_version);
@@ -181,12 +180,9 @@ gpg-password-file = \"{}\"
 upload-addr = \"{}/{}\"
 ",
             self.dl_dir().display(),
-            self.secrets.lookup("dist.gpg-password-file").unwrap()
-                        .as_str().unwrap(),
-            self.secrets.lookup("dist.upload-addr").unwrap()
-                        .as_str().unwrap(),
-            self.secrets.lookup("dist.upload-dir").unwrap()
-                        .as_str().unwrap()).as_bytes()));
+            self.secrets["dist"]["gpg-password-file"].as_str().unwrap(),
+            self.secrets["dist"]["upload-addr"].as_str().unwrap(),
+            self.secrets["dist"]["upload-dir"].as_str().unwrap()).as_bytes()));
     }
 
     fn current_version_same(&mut self, prev: &str) -> bool {
@@ -282,10 +278,8 @@ upload-addr = \"{}/{}\"
     }
 
     fn publish_archive(&mut self) {
-        let bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
-                                 .as_str().unwrap();
-        let dir = self.secrets.lookup("dist.upload-dir").unwrap()
-                              .as_str().unwrap();
+        let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
+        let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
         run(self.s3cmd()
                 .arg("sync")
@@ -294,10 +288,8 @@ upload-addr = \"{}/{}\"
     }
 
     fn publish_release(&mut self) {
-        let bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
-                                 .as_str().unwrap();
-        let dir = self.secrets.lookup("dist.upload-dir").unwrap()
-                              .as_str().unwrap();
+        let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
+        let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, dir);
         run(self.s3cmd()
                 .arg("sync")
@@ -345,16 +337,11 @@ file_fields = ['path', 'size', 'mdate']
 filename = 'index.txt'
 
 ",
-      	bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
-                             .as_str().unwrap(),
-      	region = self.secrets.lookup("dist.upload-bucket-region").unwrap()
-                             .as_str().unwrap(),
-      	upload_dir = self.secrets.lookup("dist.upload-dir").unwrap()
-                                 .as_str().unwrap(),
-        access_key = self.secrets.lookup("dist.aws-access-key-id").unwrap()
-                                 .as_str().unwrap(),
-        secret_key = self.secrets.lookup("dist.aws-secret-key").unwrap()
-                                 .as_str().unwrap(),
+        bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap(),
+        region = self.secrets["dist"]["upload-bucket-region"].as_str().unwrap(),
+        upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap(),
+        access_key = self.secrets["dist"]["aws-access-key-id"].as_str().unwrap(),
+        secret_key = self.secrets["dist"]["aws-secret-key"].as_str().unwrap(),
 ).as_bytes()));
 
         run(Command::new("python3")
@@ -364,10 +351,8 @@ filename = 'index.txt'
         t!(fs::rename(dir.join("index.json"), dir.join("dist/index.json")));
         t!(fs::rename(dir.join("index.txt"), dir.join("dist/index.txt")));
 
-        let bucket = self.secrets.lookup("dist.upload-bucket").unwrap()
-                                 .as_str().unwrap();
-        let upload_dir = self.secrets.lookup("dist.upload-dir").unwrap()
-                                     .as_str().unwrap();
+        let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
+        let upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, upload_dir);
         run(self.s3cmd()
                 .arg("sync")
@@ -408,7 +393,7 @@ filename = 'index.txt'
         let dst = self.work.join("payload.json");
         t!(t!(File::create(&dst)).write_all(json.as_bytes()));
 
-        let distribution_id = self.secrets.lookup("dist.cloudfront-distribution-id").unwrap()
+        let distribution_id = self.secrets["dist"]["cloudfront-distribution-id"]
                                           .as_str().unwrap();
         let mut cmd = Command::new("aws");
         self.aws_creds(&mut cmd);
@@ -437,20 +422,16 @@ filename = 'index.txt'
     }
 
     fn aws_creds(&self, cmd: &mut Command) {
-        let access = self.secrets.lookup("dist.aws-access-key-id").unwrap()
-                                 .as_str().unwrap();
-        let secret = self.secrets.lookup("dist.aws-secret-key").unwrap()
-                                 .as_str().unwrap();
+        let access = self.secrets["dist"]["aws-access-key-id"].as_str().unwrap();
+        let secret = self.secrets["dist"]["aws-secret-key"].as_str().unwrap();
         cmd.env("AWS_ACCESS_KEY_ID", &access)
            .env("AWS_SECRET_ACCESS_KEY", &secret);
     }
 
     fn download_manifest(&mut self) -> toml::Value {
         t!(self.handle.get(true));
-        let addr = self.secrets.lookup("dist.upload-addr").unwrap()
-                               .as_str().unwrap();
-        let upload_dir = self.secrets.lookup("dist.upload-dir").unwrap()
-                                     .as_str().unwrap();
+        let addr = self.secrets["dist"]["upload-addr"].as_str().unwrap();
+        let upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let url = format!("{}/{}/channel-rust-{}.toml",
                           addr,
                           upload_dir,
