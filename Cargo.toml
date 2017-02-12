@@ -1,0 +1,6 @@
+[workspace]
+members = [
+  "tq",
+  "rbars",
+  "promote-release",
+]
