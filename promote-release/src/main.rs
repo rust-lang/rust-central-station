@@ -3,7 +3,6 @@ extern crate flate2;
 extern crate fs2;
 extern crate rand;
 #[macro_use]
-extern crate serde_derive;
 extern crate serde_json;
 extern crate tar;
 extern crate toml;
@@ -361,34 +360,18 @@ filename = 'index.txt'
     }
 
     fn invalidate_cloudfront(&mut self) {
-        #[derive(Serialize)]
-        struct InvalidationBatch {
-            #[serde(rename = "Paths")]
-            paths: InvalidationPaths,
-            #[serde(rename = "CallerReference")]
-            reference: String,
-        }
-
-        #[derive(Serialize)]
-        struct InvalidationPaths {
-            #[serde(rename = "Items")]
-            items: Vec<String>,
-            #[serde(rename = "Quantity")]
-            quantity: usize,
-        }
-
-        let batch = InvalidationBatch {
-            paths: InvalidationPaths {
-                items: vec![
-                    "/dist/channel*".to_string(),
-                    "/dist/rust*".to_string(),
-                    "/dist/index*".to_string(),
+        let json = json!({
+            "Paths": {
+                "Items": [
+                    "/dist/channel*",
+                    "/dist/rust*",
+                    "/dist/index*",
+                    "/dist/",
                 ],
-                quantity: 3,
+                "Quantity": 4,
             },
-            reference: format!("rct-{}", rand::random::<usize>()),
-        };
-        let json = t!(serde_json::to_string(&batch));
+            "CallerReference": format!("rct-{}", rand::random::<usize>()),
+        }).to_string();
         let dst = self.work.join("payload.json");
         t!(t!(File::create(&dst)).write_all(json.as_bytes()));
 
