@@ -12,7 +12,10 @@ fn main() {
     let value: Value = input.parse().expect("failed to parse input");
 
     for arg in env::args().skip(1) {
-        let value = value.lookup(&arg).expect(&format!("`{}` not found", arg));
+        let mut value = &value;
+        for part in arg.split('.') {
+            value = &value[part];
+        }
         match *value {
             Value::String(ref s) => println!("{}", s),
             Value::Integer(i) => println!("{}", i),

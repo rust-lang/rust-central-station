@@ -45,6 +45,6 @@ fn convert(toml: Value) -> Json {
         Value::Table(table) => Json::Object(table.into_iter().map(|(k, v)| {
             (k, convert(v))
         }).collect()),
-        Value::Datetime(dt) => Json::String(dt),
+        Value::Datetime(dt) => Json::String(dt.to_string()),
     }
 }

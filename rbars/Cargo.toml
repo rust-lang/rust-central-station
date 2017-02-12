@@ -4,6 +4,6 @@ version = "0.1.0"
 authors = ["Alex Crichton <alex@alexcrichton.com>"]
 
 [dependencies]
-toml = { version = "0.2", default-features = false }
+toml = "0.3"
 handlebars = "0.24"
 rustc-serialize = "0.3"
