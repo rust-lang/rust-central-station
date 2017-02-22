@@ -149,12 +149,7 @@ impl Context {
         }
         self.publish_archive();
         self.publish_docs();
-
-        // If we're not a stable release, then we publish everything. For stable
-        // we wait for a manual trigger to do the release
-        if self.release != "stable" {
-            self.publish_release();
-        }
+        self.publish_release();
 
         self.update_dist_index();
         self.invalidate_cloudfront();
@@ -294,7 +289,7 @@ upload-addr = \"{}/{}\"
         let (version, upload_dir) = match &self.release[..] {
             "stable" => {
                 let vers = &self.current_version.as_ref().unwrap()[..];
-                (vers, vers)
+                (vers, "stable")
             }
             "beta" => ("beta", "beta"),
             "nightly" => ("nightly", "master"),
@@ -329,6 +324,19 @@ upload-addr = \"{}/{}\"
                 .arg("--delete-removed")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
+
+        // Stable artifacts also go to `/doc/$version/
+        if upload_dir == "stable" {
+            let dst = format!("s3://{}/doc/{}/", bucket, version);
+            run(self.s3cmd()
+                    .arg("sync")
+                    .arg("-P")
+                    .arg("-n")
+                    .arg("--no-progress")
+                    .arg("--delete-removed")
+                    .arg(format!("{}/", docs.display()))
+                    .arg(&dst));
+        }
     }
 
     fn publish_release(&mut self) {
