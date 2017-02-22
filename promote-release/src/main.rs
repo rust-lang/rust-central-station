@@ -29,6 +29,7 @@ struct Context {
     handle: Easy,
 	secrets: toml::Value,
     date: String,
+    current_version: Option<String>,
 }
 
 // Called as:
@@ -44,6 +45,7 @@ fn main() {
         secrets: t!(secrets.parse()),
         handle: Easy::new(),
         date: output(Command::new("date").arg("+%Y-%m-%d")).trim().to_string(),
+        current_version: None,
     }.run()
 }
 
@@ -146,6 +148,7 @@ impl Context {
             t!(fs::copy(file.path(), self.dl_dir().join(file.file_name())));
         }
         self.publish_archive();
+        self.publish_docs();
 
         // If we're not a stable release, then we publish everything. For stable
         // we wait for a manual trigger to do the release
@@ -222,6 +225,7 @@ upload-addr = \"{}/{}\"
         println!("current version: {}", current);
 
         let current_version = current.split(' ').next().unwrap();
+        self.current_version = Some(current_version.to_string());
 
         // The release process for beta looks like so:
         //
@@ -283,6 +287,47 @@ upload-addr = \"{}/{}\"
         run(self.s3cmd()
                 .arg("sync")
                 .arg(format!("{}/", self.dl_dir().display()))
+                .arg(&dst));
+    }
+
+    fn publish_docs(&mut self) {
+        let (version, upload_dir) = match &self.release[..] {
+            "stable" => {
+                let vers = &self.current_version.as_ref().unwrap()[..];
+                (vers, vers)
+            }
+            "beta" => ("beta", "beta"),
+            "nightly" => ("nightly", "master"),
+            _ => panic!(),
+        };
+
+        // Pull out HTML documentation from one of the `rust-docs-*` tarballs.
+        // For now we just arbitrarily pick x86_64-unknown-linux-gnu.
+        let docs = self.work.join("docs");
+        drop(fs::remove_dir_all(&docs));
+        t!(fs::create_dir_all(&docs));
+        let target = "x86_64-unknown-linux-gnu";
+        let tarball_prefix = format!("rust-docs-{}-{}", version, target);
+        let tarball = self.dl_dir().join(&tarball_prefix).with_extension(".tar.gz");
+        let tarball_dir = format!("{}/rust-docs/share/doc/rust/html",
+                                  tarball_prefix);
+        run(Command::new("tar")
+                    .arg("xf")
+                    .arg(&tarball)
+                    .arg("--strip-components=6")
+                    .arg(&tarball_dir)
+                    .current_dir(&docs));
+
+        // Upload this to `/doc/$channel`
+        let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
+        let dst = format!("s3://{}/doc/{}/", bucket, upload_dir);
+        run(self.s3cmd()
+                .arg("sync")
+                .arg("-P")
+                .arg("-n")
+                .arg("--no-progress")
+                .arg("--delete-removed")
+                .arg(format!("{}/", docs.display()))
                 .arg(&dst));
     }
 
