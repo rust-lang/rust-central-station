@@ -1,7 +1,7 @@
-Root=nagbot.rs@gmail.com
-Mailhub=smtp.gmail.com:587
-RewriteDomain=gmail.com
-AuthUser=nagbot.rs
+Root={{ nagbot.root }}
+Mailhub={{ nagbot.mailhub }}
+RewriteDomain={{ nagbot.rewrite-domain }}
+AuthUser={{ nagbot.user }}
 AuthPass={{ nagbot.password }}
 AuthMethod=LOGIN
 FromLineOverride=Yes
