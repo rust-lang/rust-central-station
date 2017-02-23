@@ -22,15 +22,23 @@ RUN apt-get update -y && \
       s3cmd \
       cmake \
       logrotate \
-      file
+      file \
+      ssmtp
+
+# Install Rust and Cargo
+RUN curl https://sh.rustup.rs | sh -s -- -y
+ENV PATH=$PATH:/root/.cargo/bin
 
 # Install cancelbot, a bot that cancels AppVeyor/Travis builds if we don't need
 # them. This is how we keep a manageable queue on the two services
-RUN curl https://sh.rustup.rs | sh -s -- -y
-ENV PATH=$PATH:/root/.cargo/bin
 RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
       --rev 9fc5ae5c5f2db6162541c00365932561421b25f2
+
+# Install nag-rs, a bot for nagging the subteams
+RUN cargo install \
+      --git https://github.com/aturon/nag-rs \
+      --rev c7180e4067b5cd936175f4573d0260795c727be8
 
 # Install homu, our integration daemon
 RUN git clone https://github.com/servo/homu /homu
