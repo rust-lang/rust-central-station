@@ -41,3 +41,7 @@ gpg --import `tq dist.gpg-key < $secrets`
 # Configure and run homu
 rbars $secrets /src/homu.toml.template > /tmp/homu.toml
 homu -v -c /tmp/homu.toml 2>&1 | logger --tag homu
+
+# Configure email nagbot, which is run via cron
+rbars $secrets /src/ssmtp.conf.template > /etc/ssmtp/ssmtp.conf
+tq nagbot.token < $secrets > /tmp/nagbot-token
