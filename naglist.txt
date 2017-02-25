@@ -1,5 +1,5 @@
 aturon,aturon@mozilla.com
-alexcrichton,alexcrichton@mozilla.com
+alexcrichton,acrichton@mozilla.com
 brson,brson@mozilla.com
 wycats,wycats@gmail.com
 steveklabnik,steve@steveklabnik.com
