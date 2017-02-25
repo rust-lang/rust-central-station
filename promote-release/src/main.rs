@@ -292,7 +292,7 @@ upload-addr = \"{}/{}\"
                 (vers, "stable")
             }
             "beta" => ("beta", "beta"),
-            "nightly" => ("nightly", "master"),
+            "nightly" => ("nightly", "nightly"),
             _ => panic!(),
         };
 
@@ -319,7 +319,6 @@ upload-addr = \"{}/{}\"
         run(self.s3cmd()
                 .arg("sync")
                 .arg("-P")
-                .arg("-n")
                 .arg("--no-progress")
                 .arg("--delete-removed")
                 .arg(format!("{}/", docs.display()))
@@ -331,7 +330,6 @@ upload-addr = \"{}/{}\"
             run(self.s3cmd()
                     .arg("sync")
                     .arg("-P")
-                    .arg("-n")
                     .arg("--no-progress")
                     .arg("--delete-removed")
                     .arg(format!("{}/", docs.display()))
