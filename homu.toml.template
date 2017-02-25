@@ -97,6 +97,7 @@ reviewers = [
   "carllerche",
   "huonw",
   "steveklabnik",
+  "matklad",
 ]
 try_users = []
 [repo.cargo.branch]
