@@ -19,11 +19,19 @@ RUN apt-get update -y && \
       cron \
       ssh \
       gnupg \
-      s3cmd \
       cmake \
       logrotate \
       file \
       ssmtp
+
+RUN apt-get install -y --no-install-recommends \
+      python-setuptools
+RUN git clone https://github.com/s3tools/s3cmd && \
+      cd s3cmd && \
+      git reset --hard 7302ba6311b99e524120f528cfe77c6d471ca7e3 && \
+      python setup.py install && \
+      cd .. && \
+      rm -rf s3cmd
 
 # Install Rust and Cargo
 RUN curl https://sh.rustup.rs | sh -s -- -y
