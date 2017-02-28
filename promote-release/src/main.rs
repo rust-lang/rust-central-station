@@ -451,6 +451,10 @@ filename = 'index.txt'
     fn s3cmd(&self) -> Command {
         let mut cmd = Command::new("s3cmd");
         self.aws_creds(&mut cmd);
+        // see https://github.com/s3tools/s3cmd/issues/198, the "magic"
+        // detection doesn't work for css file which we need it to work for. The
+        // built-in fallback, however, works.
+        cmd.arg("--no-mime-magic");
         return cmd
     }
 
