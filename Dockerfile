@@ -1,10 +1,10 @@
 FROM ubuntu:16.04
 
 # Set the system locales
-RUN locale-gen en_US.UTF-8  
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
@@ -44,7 +44,7 @@ RUN cargo install \
 # Install nag-rs, a bot for nagging the subteams
 RUN cargo install \
       --git https://github.com/aturon/nag-rs \
-      --rev c7180e4067b5cd936175f4573d0260795c727be8
+      --rev 28e62bcaf33f34540551dda23714e0be11bb0d84
 
 # Install homu, our integration daemon
 RUN git clone https://github.com/servo/homu /homu
