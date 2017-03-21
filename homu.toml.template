@@ -75,6 +75,7 @@ reviewers = [
   "steveklabnik",
   "vadimcn",
   "aturon",
+  "TimNN",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
