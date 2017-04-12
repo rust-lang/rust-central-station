@@ -41,9 +41,11 @@ reviewers = [
   "GuillaumeGomez",
   "Luqmana",
   "Manishearth",
+  "TimNN",
   "alexcrichton",
   "apasel422",
   "arielb1",
+  "aturon",
   "bkoropoff",
   "bluss",
   "bors",
@@ -65,6 +67,7 @@ reviewers = [
   "kimundi",
   "kmcallister",
   "michaelwoerister",
+  "nagisa",
   "nikomatsakis",
   "nrc",
   "pcwalton",
@@ -74,8 +77,6 @@ reviewers = [
   "sfackler",
   "steveklabnik",
   "vadimcn",
-  "aturon",
-  "TimNN",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
