@@ -84,6 +84,7 @@ try_users = [
   "shepmaster",
   "Mark-Simulacrum",
   "nagisa",
+  "est31",
 ]
 
 [repo.rust.github]
