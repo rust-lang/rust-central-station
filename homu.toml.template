@@ -79,7 +79,11 @@ reviewers = [
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
-try_users = []
+try_users = [
+  "shepmaster",
+  "Mark-Simulacrum",
+  "nagisa",
+]
 
 [repo.rust.github]
 secret = "{{ homu.repo-secrets.rust }}"
