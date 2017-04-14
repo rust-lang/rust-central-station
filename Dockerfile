@@ -1,11 +1,5 @@
 FROM ubuntu:16.04
 
-# Set the system locales
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
       g++ \
@@ -29,7 +23,14 @@ RUN apt-get update -y && \
       logrotate \
       file \
       ssmtp \
-      s3cmd
+      s3cmd \
+      locales
+
+# Set the system locales
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 # Install Rust and Cargo
 RUN curl https://sh.rustup.rs | sh -s -- -y
