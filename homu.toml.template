@@ -78,6 +78,7 @@ reviewers = [
   "TimNN",
   "carols10cents",
   "nagisa",
+  "Kimundi",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
