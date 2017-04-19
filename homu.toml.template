@@ -77,13 +77,13 @@ reviewers = [
   "aturon",
   "TimNN",
   "carols10cents",
+  "nagisa",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
 try_users = [
   "shepmaster",
   "Mark-Simulacrum",
-  "nagisa",
   "est31",
 ]
 
