@@ -303,7 +303,8 @@ upload-addr = \"{}/{}\"
         t!(fs::create_dir_all(&docs));
         let target = "x86_64-unknown-linux-gnu";
         let tarball_prefix = format!("rust-docs-{}-{}", version, target);
-        let tarball = format!("{}.tar.gz", self.dl_dir().join(&tarball_prefix));
+        let tarball = format!("{}.tar.gz",
+                              self.dl_dir().join(&tarball_prefix).display());
         let tarball_dir = format!("{}/rust-docs/share/doc/rust/html",
                                   tarball_prefix);
         run(Command::new("tar")
