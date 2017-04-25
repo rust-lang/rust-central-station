@@ -257,6 +257,28 @@ upload-addr = \"{}/{}\"
             panic!("appears that this rev doesn't have any artifacts, \
                     is this a stable/beta branch awaiting a PR?");
         }
+
+        // Delete residue signature/hash files. These may come around for a few
+        // reasons:
+        //
+        // 1. We died halfway through before uploading the manifest, in which
+        //    case we want to re-upload everything but we don't want to sign
+        //    signatures.
+        //
+        // 2. We're making a stable release. The stable release is first signed
+        //    with the dev key and then it's signed with the prod key later. We
+        //    want the prod key to overwrite the dev key signatures.
+        for file in t!(dl.read_dir()) {
+            let file = t!(file);
+            let path = file.path();
+            match path.extension().and_then(|s| s.to_str()) {
+                Some("asc") |
+                Some("sha256") => {
+                    t!(fs::remove_file(&path));
+                }
+                _ => {}
+            }
+        }
     }
 
     fn sign_artifacts(&mut self) {
