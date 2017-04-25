@@ -17,6 +17,7 @@ Services currently provided are:
 * homu
 * nginx in front of homu
 * ssl via letsencrypt
+* nagbot
 
 Future services
 
