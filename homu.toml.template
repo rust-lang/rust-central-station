@@ -79,14 +79,14 @@ reviewers = [
   "carols10cents",
   "nagisa",
   "Kimundi",
+  "shepmaster",
+  "Mark-Simulacrum",
+  "aidanhs",  
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
 try_users = [
-  "shepmaster",
-  "Mark-Simulacrum",
   "est31",
-  "aidanhs",
 ]
 
 [repo.rust.github]
