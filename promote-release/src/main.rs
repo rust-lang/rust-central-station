@@ -338,8 +338,9 @@ upload-addr = \"{}/{}\"
                     .current_dir(&docs));
 
         // apparently s4cmd chokes on empty files, and we typically don't have
-        // empty file except for this one lone stamp ...
+        // empty file except for this few lone files...
         drop(fs::remove_file(docs.join(".stamp")));
+        drop(fs::remove_file(docs.join(".lock")));
 
         // Upload this to `/doc/$channel`
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
