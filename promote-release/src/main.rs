@@ -243,12 +243,12 @@ upload-addr = \"{}/{}\"
 
     fn download_artifacts(&mut self, rev: &str) {
         let dl = self.dl_dir();
+        drop(fs::remove_dir_all(&dl));
         t!(fs::create_dir_all(&dl));
 
-        let src = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
-        run(self.s3cmd()
-                .arg("sync")
-                .arg("--delete-removed")
+        let src = format!("s3://rust-lang-ci/rustc-builds/{}/*", rev);
+        run(self.s4cmd()
+                .arg("get")
                 .arg(&src)
                 .arg(format!("{}/", dl.display())));
 
@@ -291,8 +291,9 @@ upload-addr = \"{}/{}\"
 
     fn upload_signatures(&mut self, rev: &str) {
         let dst = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
-        run(self.s3cmd()
-                .arg("sync")
+        run(self.s4cmd()
+                .arg("dsync")
+                .arg("--sync-check")
                 .arg(self.build_dir().join("build/dist/"))
                 .arg(&dst));
     }
@@ -301,8 +302,8 @@ upload-addr = \"{}/{}\"
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
-        run(self.s3cmd()
-                .arg("sync")
+        run(self.s4cmd()
+                .arg("dsync")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -339,10 +340,9 @@ upload-addr = \"{}/{}\"
         // Upload this to `/doc/$channel`
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dst = format!("s3://{}/doc/{}/", bucket, upload_dir);
-        run(self.s3cmd()
-                .arg("sync")
-                .arg("-P")
-                .arg("--no-progress")
+        run(self.s4cmd()
+                .arg("dsync")
+                .arg("--recursive")
                 .arg("--delete-removed")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
@@ -350,10 +350,9 @@ upload-addr = \"{}/{}\"
         // Stable artifacts also go to `/doc/$version/
         if upload_dir == "stable" {
             let dst = format!("s3://{}/doc/{}/", bucket, version);
-            run(self.s3cmd()
-                    .arg("sync")
-                    .arg("-P")
-                    .arg("--no-progress")
+            run(self.s4cmd()
+                    .arg("dsync")
+                    .arg("--recursive")
                     .arg("--delete-removed")
                     .arg(format!("{}/", docs.display()))
                     .arg(&dst));
@@ -364,8 +363,9 @@ upload-addr = \"{}/{}\"
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, dir);
-        run(self.s3cmd()
-                .arg("sync")
+        run(self.s4cmd()
+                .arg("dsync")
+                .arg("--sync-check")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -427,8 +427,9 @@ filename = 'index.txt'
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, upload_dir);
-        run(self.s3cmd()
-                .arg("sync")
+        run(self.s4cmd()
+                .arg("dsync")
+                .arg("--recursive")
                 .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
     }
@@ -471,13 +472,9 @@ filename = 'index.txt'
         self.work.join("build")
     }
 
-    fn s3cmd(&self) -> Command {
-        let mut cmd = Command::new("s3cmd");
-        self.aws_creds(&mut cmd);
-        // see https://github.com/s3tools/s3cmd/issues/198, the "magic"
-        // detection doesn't work for css file which we need it to work for. The
-        // built-in fallback, however, works.
-        cmd.arg("--no-mime-magic");
+    fn s4cmd(&self) -> Command {
+        let mut cmd = Command::new("python3");
+        cmd.arg("/s4cmd/s4cmd.py");
         return cmd
     }
 
@@ -485,7 +482,9 @@ filename = 'index.txt'
         let access = self.secrets["dist"]["aws-access-key-id"].as_str().unwrap();
         let secret = self.secrets["dist"]["aws-secret-key"].as_str().unwrap();
         cmd.env("AWS_ACCESS_KEY_ID", &access)
-           .env("AWS_SECRET_ACCESS_KEY", &secret);
+           .env("AWS_SECRET_ACCESS_KEY", &secret)
+           .env("S3_ACCESS_KEY", &access)
+           .env("S3_SECRET_KEY", &secret);
     }
 
     fn download_manifest(&mut self) -> toml::Value {

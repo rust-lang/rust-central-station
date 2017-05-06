@@ -18,22 +18,24 @@ export RUST_BACKTRACE=1
 set -ex
 
 # Generate an initial letsencrypt certificate if one isn't already available.
-if [ ! -d /etc/letsencrypt/renewal ]; then
-  nginx -c /src/nginx.tmp.conf
+if [ -z "$DEV" ]; then
+  if [ ! -d /etc/letsencrypt/renewal ]; then
+    nginx -c /src/nginx.tmp.conf
 
-  letsencrypt certonly \
-      --webroot \
-      --agree-tos \
-      -m `tq nginx.email < $secrets` \
-      -w /usr/share/nginx/html \
-      -d `tq nginx.hostname < $secrets`
+    letsencrypt certonly \
+        --webroot \
+        --agree-tos \
+        -m `tq nginx.email < $secrets` \
+        -w /usr/share/nginx/html \
+        -d `tq nginx.hostname < $secrets`
 
-  nginx -s stop
+    nginx -s stop
+  fi
+
+  # Configure/run nginx
+  rbars $secrets /src/nginx.conf.template > /tmp/nginx.conf
+  nginx -c /tmp/nginx.conf
 fi
-
-# Configure/run nginx
-rbars $secrets /src/nginx.conf.template > /tmp/nginx.conf
-nginx -c /tmp/nginx.conf
 
 # Import the GPG key that's specified in the secrets file
 gpg --import `tq dist.gpg-key < $secrets`
