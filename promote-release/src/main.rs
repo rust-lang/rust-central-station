@@ -337,6 +337,10 @@ upload-addr = \"{}/{}\"
                     .arg(&tarball_dir)
                     .current_dir(&docs));
 
+        // apparently s4cmd chokes on empty files, and we typically don't have
+        // empty file except for this one lone stamp ...
+        drop(fs::remove_file(docs.join(".stamp")));
+
         // Upload this to `/doc/$channel`
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dst = format!("s3://{}/doc/{}/", bucket, upload_dir);
@@ -344,7 +348,6 @@ upload-addr = \"{}/{}\"
                 .arg("dsync")
                 .arg("--recursive")
                 .arg("--delete-removed")
-                .arg("--ignore-empty-source")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
 
