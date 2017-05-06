@@ -344,6 +344,7 @@ upload-addr = \"{}/{}\"
                 .arg("dsync")
                 .arg("--recursive")
                 .arg("--delete-removed")
+                .arg("--ignore-empty-source")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
 
