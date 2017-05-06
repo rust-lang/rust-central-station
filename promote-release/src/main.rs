@@ -475,6 +475,7 @@ filename = 'index.txt'
     fn s4cmd(&self) -> Command {
         let mut cmd = Command::new("python3");
         cmd.arg("/s4cmd/s4cmd.py");
+        self.aws_creds(&mut cmd);
         return cmd
     }
 
