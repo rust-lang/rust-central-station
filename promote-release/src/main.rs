@@ -246,9 +246,10 @@ upload-addr = \"{}/{}\"
         drop(fs::remove_dir_all(&dl));
         t!(fs::create_dir_all(&dl));
 
-        let src = format!("s3://rust-lang-ci/rustc-builds/{}/*", rev);
-        run(self.s4cmd()
-                .arg("get")
+        let src = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
+        run(self.aws_s3()
+                .arg("cp")
+                .arg("--recursive")
                 .arg(&src)
                 .arg(format!("{}/", dl.display())));
 
@@ -291,9 +292,10 @@ upload-addr = \"{}/{}\"
 
     fn upload_signatures(&mut self, rev: &str) {
         let dst = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
-        run(self.s4cmd()
-                .arg("dsync")
-                .arg("--sync-check")
+        run(self.aws_s3()
+                .arg("cp")
+                .arg("--dryrun")
+                .arg("--recursive")
                 .arg(self.build_dir().join("build/dist/"))
                 .arg(&dst));
     }
@@ -302,8 +304,10 @@ upload-addr = \"{}/{}\"
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
-        run(self.s4cmd()
-                .arg("dsync")
+        run(self.aws_s3()
+                .arg("cp")
+                .arg("--dryrun")
+                .arg("--recursive")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -337,28 +341,23 @@ upload-addr = \"{}/{}\"
                     .arg(&tarball_dir)
                     .current_dir(&docs));
 
-        // apparently s4cmd chokes on empty files, and we typically don't have
-        // empty file except for this few lone files...
-        drop(fs::remove_file(docs.join(".stamp")));
-        drop(fs::remove_file(docs.join(".lock")));
-
         // Upload this to `/doc/$channel`
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dst = format!("s3://{}/doc/{}/", bucket, upload_dir);
-        run(self.s4cmd()
-                .arg("dsync")
-                .arg("--recursive")
-                .arg("--delete-removed")
+        run(self.aws_s3()
+                .arg("sync")
+                .arg("--dryrun")
+                .arg("--delete")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
 
         // Stable artifacts also go to `/doc/$version/
         if upload_dir == "stable" {
             let dst = format!("s3://{}/doc/{}/", bucket, version);
-            run(self.s4cmd()
-                    .arg("dsync")
-                    .arg("--recursive")
-                    .arg("--delete-removed")
+            run(self.aws_s3()
+                    .arg("sync")
+                    .arg("--dryrun")
+                    .arg("--delete")
                     .arg(format!("{}/", docs.display()))
                     .arg(&dst));
         }
@@ -368,9 +367,10 @@ upload-addr = \"{}/{}\"
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, dir);
-        run(self.s4cmd()
-                .arg("dsync")
-                .arg("--sync-check")
+        run(self.aws_s3()
+                .arg("cp")
+                .arg("--dryrun")
+                .arg("--recursive")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -432,8 +432,9 @@ filename = 'index.txt'
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/", bucket, upload_dir);
-        run(self.s4cmd()
-                .arg("dsync")
+        run(self.aws_s3()
+                .arg("cp")
+                .arg("--dryrun")
                 .arg("--recursive")
                 .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
@@ -477,9 +478,9 @@ filename = 'index.txt'
         self.work.join("build")
     }
 
-    fn s4cmd(&self) -> Command {
-        let mut cmd = Command::new("python3");
-        cmd.arg("/s4cmd/s4cmd.py");
+    fn aws_s3(&self) -> Command {
+        let mut cmd = Command::new("aws");
+        cmd.arg("s3");
         self.aws_creds(&mut cmd);
         return cmd
     }
@@ -488,9 +489,7 @@ filename = 'index.txt'
         let access = self.secrets["dist"]["aws-access-key-id"].as_str().unwrap();
         let secret = self.secrets["dist"]["aws-secret-key"].as_str().unwrap();
         cmd.env("AWS_ACCESS_KEY_ID", &access)
-           .env("AWS_SECRET_ACCESS_KEY", &secret)
-           .env("S3_ACCESS_KEY", &access)
-           .env("S3_SECRET_KEY", &secret);
+           .env("AWS_SECRET_ACCESS_KEY", &secret);
     }
 
     fn download_manifest(&mut self) -> toml::Value {

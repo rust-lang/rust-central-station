@@ -77,12 +77,6 @@ RUN git clone https://github.com/brson/s3-directory-listing /s3-directory-listin
 RUN pip3 install boto
 RUN cd /s3-directory-listing && git reset --hard 1dc88c6b0f6c4df470d35d1c212ee65147926064
 
-# Install s4cmd which claims to be faster than s3cmd
-RUN pip3 install boto3 pytz
-RUN git clone https://github.com/bloomreach/s4cmd /s4cmd
-RUN cd /s4cmd && git reset --hard f5f5ff076507ae867843a17550fce11e05fb18fa
-ENV PATH=$PATH:/s4cmd
-
 # Install our crontab which runs our various services on timers
 ADD crontab /etc/cron.d/rcs
 RUN chmod 0644 /etc/cron.d/rcs
