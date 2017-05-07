@@ -23,7 +23,6 @@ Future services
 
 * signing Rust releases
 
-
 ## Architecture
 
 This is intended to be run as a container on the destination server, so the
