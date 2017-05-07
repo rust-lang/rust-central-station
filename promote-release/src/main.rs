@@ -294,7 +294,6 @@ upload-addr = \"{}/{}\"
         let dst = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
         run(self.aws_s3()
                 .arg("cp")
-                .arg("--dryrun")
                 .arg("--recursive")
                 .arg(self.build_dir().join("build/dist/"))
                 .arg(&dst));
@@ -306,7 +305,6 @@ upload-addr = \"{}/{}\"
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
         run(self.aws_s3()
                 .arg("cp")
-                .arg("--dryrun")
                 .arg("--recursive")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
@@ -346,7 +344,6 @@ upload-addr = \"{}/{}\"
         let dst = format!("s3://{}/doc/{}/", bucket, upload_dir);
         run(self.aws_s3()
                 .arg("sync")
-                .arg("--dryrun")
                 .arg("--delete")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
@@ -356,7 +353,6 @@ upload-addr = \"{}/{}\"
             let dst = format!("s3://{}/doc/{}/", bucket, version);
             run(self.aws_s3()
                     .arg("sync")
-                    .arg("--dryrun")
                     .arg("--delete")
                     .arg(format!("{}/", docs.display()))
                     .arg(&dst));
@@ -369,7 +365,6 @@ upload-addr = \"{}/{}\"
         let dst = format!("s3://{}/{}/", bucket, dir);
         run(self.aws_s3()
                 .arg("cp")
-                .arg("--dryrun")
                 .arg("--recursive")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
@@ -434,7 +429,6 @@ filename = 'index.txt'
         let dst = format!("s3://{}/{}/", bucket, upload_dir);
         run(self.aws_s3()
                 .arg("cp")
-                .arg("--dryrun")
                 .arg("--recursive")
                 .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
