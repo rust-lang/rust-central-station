@@ -250,6 +250,7 @@ upload-addr = \"{}/{}\"
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
+                .arg("--only-show-errors")
                 .arg(&src)
                 .arg(format!("{}/", dl.display())));
 
@@ -295,6 +296,7 @@ upload-addr = \"{}/{}\"
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
+                .arg("--only-show-errors")
                 .arg(self.build_dir().join("build/dist/"))
                 .arg(&dst));
     }
@@ -306,6 +308,7 @@ upload-addr = \"{}/{}\"
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
+                .arg("--only-show-errors")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -345,6 +348,7 @@ upload-addr = \"{}/{}\"
         run(self.aws_s3()
                 .arg("sync")
                 .arg("--delete")
+                .arg("--only-show-errors")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
 
@@ -354,6 +358,7 @@ upload-addr = \"{}/{}\"
             run(self.aws_s3()
                     .arg("sync")
                     .arg("--delete")
+                    .arg("--only-show-errors")
                     .arg(format!("{}/", docs.display()))
                     .arg(&dst));
         }
@@ -366,6 +371,7 @@ upload-addr = \"{}/{}\"
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
+                .arg("--only-show-errors")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -430,6 +436,7 @@ filename = 'index.txt'
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
+                .arg("--only-show-errors")
                 .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
     }
