@@ -82,6 +82,7 @@ reviewers = [
   "shepmaster",
   "Mark-Simulacrum",
   "aidanhs",  
+  "dtolnay",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
