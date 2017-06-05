@@ -89,6 +89,7 @@ reviewers = [
 # who has 'try' rights? (try, retry, force, clean, prioritization)
 try_users = [
   "est31",
+  "tomprince",
 ]
 
 [repo.rust.github]
