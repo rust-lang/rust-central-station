@@ -1,3 +1,5 @@
+max_priority = 9001
+
 [db]
 file = '/src/data/main.db'
 
@@ -12,6 +14,7 @@ access_token = "{{ homu.github.access-token }}"
 # A GitHub oauth application for this instance of homu:
 app_client_id = "{{ homu.github.app-client-id }}"
 app_client_secret = "{{ homu.github.app-client-secret }}"
+
 
 [git]
 
@@ -98,6 +101,7 @@ secret = "{{ homu.repo-secrets.rust }}"
 context = "continuous-integration/travis-ci/push"
 [repo.rust.status.appveyor]
 context = "continuous-integration/appveyor/branch"
+try = false
 
 
 [repo.cargo]
