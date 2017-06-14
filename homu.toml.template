@@ -115,6 +115,7 @@ reviewers = [
   "huonw",
   "steveklabnik",
   "matklad",
+  "Mark-Simulacrum",
 ]
 try_users = []
 [repo.cargo.branch]
