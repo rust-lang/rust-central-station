@@ -1,7 +1,7 @@
 max_priority = 9001
 
 [db]
-file = '/src/data/main.db'
+file = '/data/main.db'
 
 [github]
 

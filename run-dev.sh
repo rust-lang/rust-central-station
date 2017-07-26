@@ -8,8 +8,7 @@ docker build \
   .
 
 exec docker run \
-  --volume `pwd`:/src:ro \
-  --volume `pwd`/data:/src/data \
+  --volume `pwd`/data:/data \
   --volume `pwd`/data/letsencrypt:/etc/letsencrypt \
   --env DEV=1 \
   --publish 8080:80 \

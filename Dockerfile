@@ -81,8 +81,11 @@ RUN cd /s3-directory-listing && git reset --hard 1dc88c6b0f6c4df470d35d1c212ee65
 ADD crontab /etc/cron.d/rcs
 RUN chmod 0644 /etc/cron.d/rcs
 
-# And finally, initialize our known set of ssh hosts so git doesn't prompt us
-# later.
+# Initialize our known set of ssh hosts so git doesn't prompt us later.
 RUN mkdir /root/.ssh && ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+# Copy the source directory into the image so we can run scripts and template
+# configs from there
+COPY . /src/
 
 CMD ["/src/bin/run.sh"]
