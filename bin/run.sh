@@ -2,7 +2,7 @@
 
 set -e
 
-secrets=/src/data/secrets.toml
+secrets=/data/secrets.toml
 
 # We mounted /var/log from a local log dir, but ubuntu expects it to be owned by
 # root:syslog, so change it here

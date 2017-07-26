@@ -2,7 +2,7 @@
 
 set -e
 
-secrets=/src/data/secrets.toml
+secrets=/data/secrets.toml
 
 exec cancelbot \
   --travis `tq cancelbot.travis-token < $secrets` \
