@@ -84,7 +84,7 @@ reviewers = [
   "Kimundi",
   "shepmaster",
   "Mark-Simulacrum",
-  "aidanhs",  
+  "aidanhs",
   "dtolnay",
   "QuietMisdreavus",
 ]
@@ -93,6 +93,7 @@ reviewers = [
 try_users = [
   "est31",
   "tomprince",
+  "kennytm",
 ]
 
 [repo.rust.github]
