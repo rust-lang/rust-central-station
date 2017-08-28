@@ -50,7 +50,6 @@ reviewers = [
   "bkoropoff",
   "bluss",
   "bors",
-  "brson",
   "bstrie",
   "cmr",
   "dotdash",
@@ -109,7 +108,6 @@ try = false
 owner = "rust-lang"
 name = "cargo"
 reviewers = [
-  "brson",
   "alexcrichton",
   "wycats",
   "carllerche",
@@ -132,7 +130,6 @@ context = "continuous-integration/appveyor/branch"
 owner = "rust-lang"
 name = "libc"
 reviewers = [
-  "brson",
   "alexcrichton",
 ]
 try_users = []
@@ -152,9 +149,9 @@ context = "continuous-integration/appveyor/branch"
 owner = "rust-lang-nursery"
 name = "rustup.rs"
 reviewers = [
-  "brson",
   "alexcrichton",
   "Diggsey",
+  "nrc",
 ]
 try_users = []
 
@@ -173,7 +170,6 @@ context = "continuous-integration/appveyor/branch"
 owner = "rust-lang-nursery"
 name = "compiler-builtins"
 reviewers = [
-  "brson",
   "alexcrichton",
   "japaric",
   "Amanieu",
