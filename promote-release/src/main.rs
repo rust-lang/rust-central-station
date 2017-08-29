@@ -170,7 +170,16 @@ impl Context {
         run(Command::new(rust.join("configure"))
                     .current_dir(&build)
                     .arg(format!("--release-channel={}", self.release)));
-        t!(t!(File::create(build.join("config.toml"))).write_all(format!("\
+        let mut config = String::new();
+        let path = build.join("config.toml");
+        drop(File::open(&path).and_then(|mut f| f.read_to_string(&mut config)));
+        let lines = config.lines().filter(|l| !l.starts_with("[dist]"));
+        let mut new_config = String::new();
+        for line in lines {
+            new_config.push_str(line);
+            new_config.push_str("\n");
+        }
+        new_config.push_str(&format!("
 [dist]
 sign-folder = \"{}\"
 gpg-password-file = \"{}\"
@@ -179,7 +188,8 @@ upload-addr = \"{}/{}\"
             self.dl_dir().display(),
             self.secrets["dist"]["gpg-password-file"].as_str().unwrap(),
             self.secrets["dist"]["upload-addr"].as_str().unwrap(),
-            self.secrets["dist"]["upload-dir"].as_str().unwrap()).as_bytes()));
+            self.secrets["dist"]["upload-dir"].as_str().unwrap()));
+        t!(t!(File::create(&path)).write_all(new_config.as_bytes()));
     }
 
     fn current_version_same(&mut self, prev: &str) -> bool {
