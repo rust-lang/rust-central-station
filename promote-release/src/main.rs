@@ -256,7 +256,7 @@ upload-addr = \"{}/{}\"
         drop(fs::remove_dir_all(&dl));
         t!(fs::create_dir_all(&dl));
 
-        let src = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
+        let src = format!("s3://rust-lang-ci2/rustc-builds/{}/", rev);
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
@@ -302,7 +302,7 @@ upload-addr = \"{}/{}\"
     }
 
     fn upload_signatures(&mut self, rev: &str) {
-        let dst = format!("s3://rust-lang-ci/rustc-builds/{}/", rev);
+        let dst = format!("s3://rust-lang-ci2/rustc-builds/{}/", rev);
         run(self.aws_s3()
                 .arg("cp")
                 .arg("--recursive")
