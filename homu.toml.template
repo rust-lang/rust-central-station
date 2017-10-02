@@ -38,52 +38,87 @@ name = "rust"
 
 # who has r+ rights?
 reviewers = [
-  "Aatch",
+  # core
+  "nrc",
+  "alexcrichton",
+  "steveklabnik",
+  "nikomatsakis",
+  "carols10cents",
+  "aturon",
+  "erickt",
+
+  # lang
+  "eddyb",
+  # also on core: "nrc",
+  "pnkfelix",
+  # also on core: "nikomatsakis",
+  # also on core: "aturon",
+
+  # libs
+  # also on core: "alexcrichton",
+  "sfackler",
   "BurntSushi",
-  "FlaPer87",
+  "Kimundi",
+  "dtolnay",
+  # also on core: "aturon",
+
+  # compiler
+  "arielb1",
+  # also on lang: "eddyb",
+  "estebank",
+  # also on core: "nrc",
+  "petrochenkov",
+  # also on lang: "pnkfelix",
+  # also on core: "nikomatsakis",
+  "jseyfried",
+  "michaelwoerister",
+
+  # dev tools
+  "japaric",
+  "jonathandturner",
+  # also on compiler: "michaelwoerister",
+  # also on core: "nrc",
+
+  # infra
+  # also on core: "alexcrichton",
+  "shepmaster",
+  "aidanhs",
+  "TimNN",
+  # also on core: "carols10cents",
+  "Mark-Simulacrum",
+  # also on core: "erickt",
+  # also on core: "aturon",
+
+  # docs
+  # also on core: "steveklabnik",
   "GuillaumeGomez",
+  "frewsxcv",
+  "QuietMisdreavus",
+
+  # alumni
+  "Aatch",
+  "pcwalton",
+  "huonw",
+  "dotdash",
+  "bkoropoff",
+
+  # bots
+  "bors",
+
+  # other
+  "FlaPer87",
   "Luqmana",
   "Manishearth",
-  "alexcrichton",
   "apasel422",
-  "arielb1",
-  "bkoropoff",
   "bluss",
-  "bors",
   "bstrie",
   "cmr",
-  "dotdash",
-  "eddyb",
-  "erickt",
-  "estebank",
-  "frewsxcv",
-  "huonw",
-  "japaric",
   "jdm",
-  "jonathandturner",
   "jroesch",
-  "jseyfried",
   "kballard",
-  "michaelwoerister",
-  "nikomatsakis",
-  "nrc",
-  "pcwalton",
-  "petrochenkov",
-  "pnkfelix",
   "sanxiyn",
-  "sfackler",
-  "steveklabnik",
   "vadimcn",
-  "aturon",
-  "TimNN",
-  "carols10cents",
   "nagisa",
-  "Kimundi",
-  "shepmaster",
-  "Mark-Simulacrum",
-  "aidanhs",
-  "dtolnay",
-  "QuietMisdreavus",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
