@@ -147,12 +147,21 @@ try = false
 owner = "rust-lang"
 name = "cargo"
 reviewers = [
+  # cargo team
   "alexcrichton",
+  "carols10cents",
+  "withoutboats",
+  "matklad",
   "wycats",
+  "joshtriplett",
+  "aturon",
+
+  # alumni
   "carllerche",
   "huonw",
+
+  # other
   "steveklabnik",
-  "matklad",
   "Mark-Simulacrum",
 ]
 try_users = []
