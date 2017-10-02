@@ -41,6 +41,7 @@ reviewers = [
   # core
   "nrc",
   "alexcrichton",
+  "wycats",
   "steveklabnik",
   "nikomatsakis",
   "carols10cents",
@@ -48,6 +49,8 @@ reviewers = [
   "erickt",
 
   # lang
+  "cramertj",
+  "withoutboats",
   "eddyb",
   # also on core: "nrc",
   "pnkfelix",
@@ -74,8 +77,11 @@ reviewers = [
   "michaelwoerister",
 
   # dev tools
+  "fitzgen",
   "japaric",
   "jonathandturner",
+  "killercup",
+  "matklad",
   # also on compiler: "michaelwoerister",
   # also on core: "nrc",
 
@@ -87,6 +93,8 @@ reviewers = [
   # also on core: "carols10cents",
   "Mark-Simulacrum",
   # also on core: "erickt",
+  "tomprince",
+  "kennytm",
   # also on core: "aturon",
 
   # docs
@@ -124,8 +132,6 @@ reviewers = [
 # who has 'try' rights? (try, retry, force, clean, prioritization)
 try_users = [
   "est31",
-  "tomprince",
-  "kennytm",
 ]
 
 [repo.rust.github]
