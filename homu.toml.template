@@ -179,6 +179,7 @@ owner = "rust-lang"
 name = "libc"
 reviewers = [
   "alexcrichton",
+  "malbarbo",
 ]
 try_users = []
 
