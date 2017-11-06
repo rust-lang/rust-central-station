@@ -147,7 +147,7 @@ impl Context {
             let file = t!(file);
             t!(fs::copy(file.path(), self.dl_dir().join(file.file_name())));
         }
-        self.publish_archive();
+        self.publish_archive(rev);
         self.publish_docs();
         self.publish_release();
 
@@ -311,7 +311,7 @@ upload-addr = \"{}/{}\"
                 .arg(&dst));
     }
 
-    fn publish_archive(&mut self) {
+    fn publish_archive(&mut self, rev: &str) {
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
         let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
         let dst = format!("s3://{}/{}/{}/", bucket, dir, self.date);
@@ -321,6 +321,19 @@ upload-addr = \"{}/{}\"
                 .arg("--only-show-errors")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
+        if self.release == "nightly" {
+            let src = format!("s3://rust-lang-ci2/rustc-builds-alt/{}/", rev);
+            let dst = format!("s3://{}/{}/{}/alt/", bucket, dir, self.date);
+            run(self.aws_s3()
+                    .arg("cp")
+                    .arg("--recursive")
+                    .arg("--only-show-errors")
+                    .arg("--exclude").arg("*")
+                    .arg("--include").arg("rustc-*.tar.gz")
+                    .arg("--exclude").arg("rustc-*src.tar.gz")
+                    .arg(src)
+                    .arg(dst));
+        }
     }
 
     fn publish_docs(&mut self) {
