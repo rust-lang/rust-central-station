@@ -75,6 +75,7 @@ reviewers = [
   # also on core: "nikomatsakis",
   "jseyfried",
   "michaelwoerister",
+  "Zoxc",
 
   # dev tools
   "fitzgen",
