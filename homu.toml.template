@@ -56,6 +56,7 @@ reviewers = [
   "pnkfelix",
   # also on core: "nikomatsakis",
   # also on core: "aturon",
+  "JoshTriplett",
 
   # libs
   # also on core: "alexcrichton",
@@ -128,6 +129,8 @@ reviewers = [
   "sanxiyn",
   "vadimcn",
   "nagisa",
+  "KodrAus",
+  "rkruppe",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
