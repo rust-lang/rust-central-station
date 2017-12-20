@@ -44,10 +44,6 @@ fn main() {
         release: env::args().nth(2).unwrap(),
         secrets: t!(secrets.parse()),
         handle: Easy::new(),
-	// For Nightly, this is running soon after midnight
-	// so the date of 10 minutes ago is yesterday,
-	// which likely matches the commit date of the latest commit on the master branch:
-	// https://github.com/rust-lang/rust-central-station/pull/27
         date: output(Command::new("date").arg("--date=10 minutes ago").arg("+%Y-%m-%d"))
 	    .trim().to_string(),
         current_version: None,
