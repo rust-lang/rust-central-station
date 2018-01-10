@@ -68,6 +68,7 @@ reviewers = [
 
   # compiler
   "arielb1",
+  # also on lang: "cramertj",
   # also on lang: "eddyb",
   "estebank",
   # also on core: "nrc",
