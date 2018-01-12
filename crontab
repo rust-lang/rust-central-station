@@ -5,7 +5,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/b
 
 # signing/hashing/promoting releases
 0 0 * * * root promote-release /tmp/nightly nightly /data/secrets.toml 2>&1 | logger --tag release-nightly
-20 * * * * root promote-release /tmp/beta beta /data/secrets.toml 2>&1 | logger --tag release-beta
+20 3 * * * root promote-release /tmp/beta beta /data/secrets.toml 2>&1 | logger --tag release-beta
 40 * * * * root promote-release /tmp/stable stable /data/secrets-dev.toml 2>&1 | logger --tag release-stable
 
 # cancelling appveyor/travis builds if we don't need them
