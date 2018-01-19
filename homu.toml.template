@@ -35,6 +35,7 @@ port = 7942
 [repo.rust]
 owner = "rust-lang"
 name = "rust"
+timeout = 14400
 
 # who has r+ rights?
 reviewers = [
@@ -151,6 +152,8 @@ try = false
 [repo.cargo]
 owner = "rust-lang"
 name = "cargo"
+timeout = 7200
+
 reviewers = [
   # cargo team
   "alexcrichton",
@@ -182,6 +185,8 @@ context = "continuous-integration/appveyor/branch"
 [repo.libc]
 owner = "rust-lang"
 name = "libc"
+timeout = 9000
+
 reviewers = [
   "alexcrichton",
   "malbarbo",
@@ -202,6 +207,8 @@ context = "continuous-integration/appveyor/branch"
 [repo.rustup-rs]
 owner = "rust-lang-nursery"
 name = "rustup.rs"
+timeout = 12600
+
 reviewers = [
   "alexcrichton",
   "Diggsey",
@@ -245,6 +252,8 @@ context = "continuous-integration/appveyor/branch"
 [repo.regex]
 owner = "rust-lang"
 name = "regex"
+timeout = 5400
+
 reviewers = [
   "BurntSushi",
 ]
