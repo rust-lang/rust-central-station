@@ -134,6 +134,8 @@ impl Context {
             return println!("version hasn't changed, skipping");
         }
 
+        self.assert_all_components_present();
+
         // Ok we've now determined that a release needs to be done. Let's
         // configure rust, sign the artifacts we just downloaded, and upload the
         // signatures to the CI bucket.
@@ -249,6 +251,28 @@ upload-addr = \"{}/{}\"
         }
 
         prev_version == current_version
+    }
+
+    /// An emergency fix for the current situation where the RLS isn't available
+    /// too often. Don't produce nightlies if a missing component happens.
+    ///
+    /// Note that we already shouldn't merge PRs in rust-lang/rust that don't
+    /// build the rls/rustfmt
+    fn assert_all_components_present(&self) {
+        if self.release != "nightly" {
+            return
+        }
+        let components = t!(self.dl_dir().read_dir())
+            .map(|e| t!(e))
+            .map(|e| e.file_name().into_string().unwrap())
+            .filter(|s| s.contains("x86_64-unknown-linux-gnu"))
+            .collect::<Vec<_>>();
+        println!("components in this nightly {:?}", components);
+        assert!(components.iter().any(|s| s.starts_with("rls-")));
+        assert!(components.iter().any(|s| s.starts_with("rustfmt-")));
+        assert!(components.iter().any(|s| s.starts_with("rustc-")));
+        assert!(components.iter().any(|s| s.starts_with("rust-std-")));
+        assert!(components.iter().any(|s| s.starts_with("cargo-")));
     }
 
     fn download_artifacts(&mut self, rev: &str) {
