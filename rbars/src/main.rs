@@ -1,13 +1,13 @@
 extern crate toml;
 extern crate handlebars;
-extern crate rustc_serialize;
+extern crate serde_json;
 
 use std::fs::File;
 use std::io::Read;
 use std::env;
 
 use handlebars::Handlebars;
-use rustc_serialize::json::Json;
+use serde_json::Value as Json;
 use toml::Value;
 
 macro_rules! t {
@@ -35,12 +35,13 @@ fn main() {
     println!("{}", data);
 }
 
+// we cannot use `serde_json::to_value` because we want Datetime to be string.
 fn convert(toml: Value) -> Json {
     match toml {
         Value::String(s) => Json::String(s),
-        Value::Integer(i) => Json::I64(i),
-        Value::Float(f) => Json::F64(f),
-        Value::Boolean(b) => Json::Boolean(b),
+        Value::Integer(i) => i.into(),
+        Value::Float(f) => f.into(),
+        Value::Boolean(b) => Json::Bool(b),
         Value::Array(arr) => Json::Array(arr.into_iter().map(convert).collect()),
         Value::Table(table) => Json::Object(table.into_iter().map(|(k, v)| {
             (k, convert(v))

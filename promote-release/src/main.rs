@@ -210,7 +210,7 @@ upload-addr = \"{}/{}\"
             println!("looking inside {} for a version", filename);
 
             let file = t!(File::open(&e.path()));
-            let reader = t!(flate2::read::GzDecoder::new(file));
+            let reader = flate2::read::GzDecoder::new(file);
             let mut archive = tar::Archive::new(reader);
 
             let entry = t!(archive.entries()).map(|e| t!(e)).filter(|e| {
