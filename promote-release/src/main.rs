@@ -6,10 +6,11 @@ extern crate rand;
 extern crate serde_json;
 extern crate tar;
 extern crate toml;
+extern crate xz2;
 
 use std::env;
 use std::fs::{self, File, OpenOptions};
-use std::io::{Read, Write};
+use std::io::{self, Read, Write};
 use std::path::{PathBuf, Path};
 use std::process::Command;
 
@@ -304,13 +305,31 @@ upload-addr = \"{}/{}\"
         // 2. We're making a stable release. The stable release is first signed
         //    with the dev key and then it's signed with the prod key later. We
         //    want the prod key to overwrite the dev key signatures.
+        //
+        // Also, generate *.gz from *.xz if the former is missing. Since the gz
+        // and xz tarballs have the same content, we did not deploy the gz files
+        // from the CI. But rustup users may still expect to get gz files, so we
+        // are recompressing the xz files as gz here.
         for file in t!(dl.read_dir()) {
             let file = t!(file);
             let path = file.path();
             match path.extension().and_then(|s| s.to_str()) {
+                // Delete signature/hash files...
                 Some("asc") |
                 Some("sha256") => {
                     t!(fs::remove_file(&path));
+                }
+                // Generate *.gz from *.xz...
+                Some("xz") => {
+                    let gz_path = path.with_extension("gz");
+                    if !gz_path.is_file() {
+                        println!("recompressing {}...", gz_path.display());
+                        let xz = t!(File::open(path));
+                        let mut xz = xz2::read::XzDecoder::new(xz);
+                        let gz = t!(File::create(gz_path));
+                        let mut gz = flate2::write::GzEncoder::new(gz, flate2::Compression::best());
+                        t!(io::copy(&mut xz, &mut gz));
+                    }
                 }
                 _ => {}
             }
