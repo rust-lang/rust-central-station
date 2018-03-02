@@ -79,6 +79,7 @@ reviewers = [
   "jseyfried",
   "michaelwoerister",
   "Zoxc",
+  "oli-obk",
 
   # dev tools
   "fitzgen",
