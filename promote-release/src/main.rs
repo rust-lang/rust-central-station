@@ -362,6 +362,10 @@ upload-addr = \"{}/{}\"
                 .arg("cp")
                 .arg("--recursive")
                 .arg("--only-show-errors")
+                .arg("--metadata-directive")
+                .arg("REPLACE")
+                .arg("--cache-control")
+                .arg("public")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -402,6 +406,8 @@ upload-addr = \"{}/{}\"
                 .arg("sync")
                 .arg("--delete")
                 .arg("--only-show-errors")
+                .arg("--cache-control")
+                .arg("max-age=0, no-store, no-cache, must-revalidate")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
 
@@ -412,6 +418,8 @@ upload-addr = \"{}/{}\"
                     .arg("sync")
                     .arg("--delete")
                     .arg("--only-show-errors")
+                    .arg("--cache-control")
+                    .arg("max-age=0, no-store, no-cache, must-revalidate")
                     .arg(format!("{}/", docs.display()))
                     .arg(&dst));
         }
@@ -425,6 +433,8 @@ upload-addr = \"{}/{}\"
                 .arg("cp")
                 .arg("--recursive")
                 .arg("--only-show-errors")
+                .arg("--cache-control")
+                .arg("max-age=0, no-store, no-cache, must-revalidate")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -490,6 +500,8 @@ filename = 'index.txt'
                 .arg("cp")
                 .arg("--recursive")
                 .arg("--only-show-errors")
+                .arg("--cache-control")
+                .arg("max-age=0, no-store, no-cache, must-revalidate")
                 .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
     }
