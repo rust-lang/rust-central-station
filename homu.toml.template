@@ -57,7 +57,7 @@ reviewers = [
   "pnkfelix",
   # also on core: "nikomatsakis",
   # also on core: "aturon",
-  "JoshTriplett",
+  "joshtriplett",
 
   # libs
   # also on core: "alexcrichton",
