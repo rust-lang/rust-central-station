@@ -176,9 +176,9 @@ add = ['S-waiting-on-review']
 unless = ['S-blocked', 'S-waiting-on-crater', 'S-waiting-on-team']
 
 [repo.rust.labels.conflict]    # a merge conflict is detected (tell author to rebase)
-remove = ['S-waiting-on-bors', 'S-waiting-on-review']
+remove = ['S-waiting-on-bors']
 add = ['S-waiting-on-author']
-unless = ['S-blocked', 'S-waiting-on-crater', 'S-waiting-on-team']
+unless = ['S-blocked', 'S-waiting-on-crater', 'S-waiting-on-team', 'S-waiting-on-review']
 
 
 [repo.cargo]
