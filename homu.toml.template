@@ -139,6 +139,17 @@ reviewers = [
 # who has 'try' rights? (try, retry, force, clean, prioritization)
 try_users = [
   "est31",
+  "pietroalbini",
+  "jkordish",
+  "sgrif",
+  "adrq",
+  "araz",
+  "batmanaod",
+  "Aaronepower",
+  "gsollazzo",
+  "PramodBisht",
+  "cuviper",
+  "Stokhos"
 ]
 
 [repo.rust.github]
