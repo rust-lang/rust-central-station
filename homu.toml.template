@@ -65,6 +65,7 @@ reviewers = [
   "BurntSushi",
   "Kimundi",
   "dtolnay",
+  "SimonSapin",
   # also on core: "aturon",
 
   # compiler
