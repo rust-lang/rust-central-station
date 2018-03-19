@@ -48,7 +48,7 @@ RUN cargo install \
 
 # Install homu, our integration daemon
 RUN git clone https://github.com/alexcrichton/homu /homu && \
-    cd /homu && git reset --hard 891cbd00d688328e3c1a1dfa0560c5eed300ef82
+    cd /homu && git reset --hard 7dc5d2c5120eaa85a85cd7654dcb8fe42fe52806
 RUN pip3 install -e /homu
 
 # Install local programs used:
