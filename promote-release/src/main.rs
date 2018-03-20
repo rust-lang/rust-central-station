@@ -387,11 +387,27 @@ upload-addr = \"{}/{}\"
         drop(fs::remove_dir_all(&docs));
         t!(fs::create_dir_all(&docs));
         let target = "x86_64-unknown-linux-gnu";
+
+        // Unpack the regular documentation tarball.
         let tarball_prefix = format!("rust-docs-{}-{}", version, target);
         let tarball = format!("{}.tar.gz",
                               self.dl_dir().join(&tarball_prefix).display());
-        let tarball_dir = format!("{}/rust-docs/share/doc/rust/html",
-                                  tarball_prefix);
+        let tarball_dir = format!("{}/rust-docs/share/doc/rust/html", tarball_prefix);
+        run(Command::new("tar")
+                    .arg("xf")
+                    .arg(&tarball)
+                    .arg("--strip-components=6")
+                    .arg(&tarball_dir)
+                    .current_dir(&docs));
+
+        // Create the subdirectory that we will extract our nighly documentation into.
+        let tarball_dir = format!("{}/nightly-rustc", tarball_dir);
+        t!(fs::create_dir_all(&tarball_dir));
+
+        // Unpack the rustc documentation into the new directory.
+        let tarball_prefix = format!("rustc-docs-{}-{}", version, target);
+        let tarball = format!("{}.tar.gz",
+                              self.dl_dir().join(&tarball_prefix).display());
         run(Command::new("tar")
                     .arg("xf")
                     .arg(&tarball)
