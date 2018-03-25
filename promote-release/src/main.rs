@@ -400,20 +400,25 @@ upload-addr = \"{}/{}\"
                     .arg(&tarball_dir)
                     .current_dir(&docs));
 
-        // Create the subdirectory that we will extract our nighly documentation into.
-        let tarball_dir = format!("{}/nightly-rustc", tarball_dir);
-        t!(fs::create_dir_all(&tarball_dir));
-
-        // Unpack the rustc documentation into the new directory.
+        // Construct path to rustc documentation.
         let tarball_prefix = format!("rustc-docs-{}-{}", version, target);
         let tarball = format!("{}.tar.gz",
                               self.dl_dir().join(&tarball_prefix).display());
-        run(Command::new("tar")
-                    .arg("xf")
-                    .arg(&tarball)
-                    .arg("--strip-components=6")
-                    .arg(&tarball_dir)
-                    .current_dir(&docs));
+
+        // Only create and unpack rustc docs if artefacts include tarball.
+        if Path::new(&tarball).exists() {
+            // Create the subdirectory that we will extract our nighly documentation into.
+            let tarball_dir = format!("{}/nightly-rustc", tarball_dir);
+            t!(fs::create_dir_all(&tarball_dir));
+
+            // Unpack the rustc documentation into the new directory.
+            run(Command::new("tar")
+                        .arg("xf")
+                        .arg(&tarball)
+                        .arg("--strip-components=6")
+                        .arg(&tarball_dir)
+                        .current_dir(&docs));
+        }
 
         // Upload this to `/doc/$channel`
         let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
