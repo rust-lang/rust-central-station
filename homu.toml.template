@@ -150,7 +150,8 @@ try_users = [
   "gsollazzo",
   "PramodBisht",
   "cuviper",
-  "Stokhos"
+  "Stokhos",
+  "nox",
 ]
 
 [repo.rust.github]
