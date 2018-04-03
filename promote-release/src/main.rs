@@ -390,8 +390,7 @@ upload-addr = \"{}/{}\"
 
         // Unpack the regular documentation tarball.
         let tarball_prefix = format!("rust-docs-{}-{}", version, target);
-        let tarball = format!("{}.tar.gz",
-                              self.dl_dir().join(&tarball_prefix).display());
+        let tarball = format!("{}.tar.gz", self.dl_dir().join(&tarball_prefix).display());
         let tarball_dir = format!("{}/rust-docs/share/doc/rust/html", tarball_prefix);
         run(Command::new("tar")
                     .arg("xf")
@@ -402,14 +401,14 @@ upload-addr = \"{}/{}\"
 
         // Construct path to rustc documentation.
         let tarball_prefix = format!("rustc-docs-{}-{}", version, target);
-        let tarball = format!("{}.tar.gz",
-                              self.dl_dir().join(&tarball_prefix).display());
+        let tarball = format!("{}.tar.gz", self.dl_dir().join(&tarball_prefix).display());
+        // Construct the path that contains the documentation inside the tarball.
+        let tarball_dir = format!("{}/rustc-docs/share/doc/rust/html", tarball_prefix);
 
         // Only create and unpack rustc docs if artefacts include tarball.
         if Path::new(&tarball).exists() {
-            // Create the subdirectory that we will extract our nighly documentation into.
-            let tarball_dir = format!("{}/nightly-rustc", tarball_dir);
-            t!(fs::create_dir_all(&tarball_dir));
+            let rustc_docs = docs.join("nightly-rustc");
+            t!(fs::create_dir_all(&rustc_docs));
 
             // Unpack the rustc documentation into the new directory.
             run(Command::new("tar")
@@ -417,7 +416,7 @@ upload-addr = \"{}/{}\"
                         .arg(&tarball)
                         .arg("--strip-components=6")
                         .arg(&tarball_dir)
-                        .current_dir(&docs));
+                        .current_dir(&rustc_docs));
         }
 
         // Upload this to `/doc/$channel`
