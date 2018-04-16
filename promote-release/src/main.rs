@@ -426,10 +426,9 @@ upload-addr = \"{}/{}\"
                 .arg("sync")
                 .arg("--delete")
                 .arg("--only-show-errors")
-                .arg("--cache-control")
-                .arg("max-age=0, no-store, no-cache, must-revalidate")
                 .arg(format!("{}/", docs.display()))
                 .arg(&dst));
+        self.invalidate_docs(upload_dir);
 
         // Stable artifacts also go to `/doc/$version/
         if upload_dir == "stable" {
@@ -438,11 +437,21 @@ upload-addr = \"{}/{}\"
                     .arg("sync")
                     .arg("--delete")
                     .arg("--only-show-errors")
-                    .arg("--cache-control")
-                    .arg("max-age=0, no-store, no-cache, must-revalidate")
                     .arg(format!("{}/", docs.display()))
                     .arg(&dst));
+            self.invalidate_docs(&version);
         }
+    }
+
+    fn invalidate_docs(&self, dir: &str) {
+        let distribution_id = self.secrets["dist"]["rustdoc-cf-distribution-id"]
+                                          .as_str().unwrap();
+        let mut cmd = Command::new("aws");
+        self.aws_creds(&mut cmd);
+        run(cmd.arg("cloudfront")
+               .arg("create-invalidation")
+               .arg("--distribution-id").arg(distribution_id)
+               .arg("--paths").arg(format!("/{0} /{0}/*", dir)));
     }
 
     fn publish_release(&mut self) {
@@ -453,8 +462,6 @@ upload-addr = \"{}/{}\"
                 .arg("cp")
                 .arg("--recursive")
                 .arg("--only-show-errors")
-                .arg("--cache-control")
-                .arg("max-age=0, no-store, no-cache, must-revalidate")
                 .arg(format!("{}/", self.dl_dir().display()))
                 .arg(&dst));
     }
@@ -520,8 +527,6 @@ filename = 'index.txt'
                 .arg("cp")
                 .arg("--recursive")
                 .arg("--only-show-errors")
-                .arg("--cache-control")
-                .arg("max-age=0, no-store, no-cache, must-revalidate")
                 .arg(format!("{}/", dir.join("dist").display()))
                 .arg(&dst));
     }
