@@ -451,7 +451,7 @@ upload-addr = \"{}/{}\"
         run(cmd.arg("cloudfront")
                .arg("create-invalidation")
                .arg("--distribution-id").arg(distribution_id)
-               .arg("--paths").arg(format!("/{0} /{0}/*", dir)));
+               .arg("--paths").arg(format!("/{0}/*", dir)));
     }
 
     fn publish_release(&mut self) {
