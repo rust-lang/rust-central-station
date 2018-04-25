@@ -448,10 +448,15 @@ upload-addr = \"{}/{}\"
                                           .as_str().unwrap();
         let mut cmd = Command::new("aws");
         self.aws_creds(&mut cmd);
-        run(cmd.arg("cloudfront")
-               .arg("create-invalidation")
-               .arg("--distribution-id").arg(distribution_id)
-               .arg("--paths").arg(format!("/{0}/*", dir)));
+        cmd.arg("cloudfront")
+            .arg("create-invalidation")
+            .arg("--distribution-id").arg(distribution_id);
+        if dir == "stable" {
+            cmd.arg("--paths").arg("/*");
+        } else {
+            cmd.arg("--paths").arg(format!("/{0}/*", dir));
+        }
+        run(&mut cmd);
     }
 
     fn publish_release(&mut self) {
