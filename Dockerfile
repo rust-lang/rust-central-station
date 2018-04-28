@@ -39,7 +39,7 @@ ENV PATH=$PATH:/root/.cargo/bin
 # them. This is how we keep a manageable queue on the two services
 RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
-      --rev 9fc5ae5c5f2db6162541c00365932561421b25f2
+      --rev 421469ca2aeeb5e23a5201a6abe11080872af220
 
 # Install nag-rs, a bot for nagging the subteams
 RUN cargo install \
