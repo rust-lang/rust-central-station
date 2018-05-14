@@ -135,6 +135,7 @@ reviewers = [
   "nagisa",
   "KodrAus",
   "rkruppe",
+  "ollie27",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
