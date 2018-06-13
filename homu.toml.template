@@ -103,6 +103,10 @@ reviewers = [
   "kennytm",
   # also on core: "aturon",
 
+  # release
+  # also on infra: "simulacrum",
+  "pietroalbini",
+
   # docs
   # also on core: "steveklabnik",
   "GuillaumeGomez",
@@ -141,7 +145,6 @@ reviewers = [
 # who has 'try' rights? (try, retry, force, clean, prioritization)
 try_users = [
   "est31",
-  "pietroalbini",
   "jkordish",
   "sgrif",
   "adrq",
