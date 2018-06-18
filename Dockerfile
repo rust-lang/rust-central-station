@@ -48,7 +48,7 @@ RUN cargo install \
 
 # Install homu, our integration daemon
 RUN git clone https://github.com/rust-ops/homu /homu && \
-    cd /homu && git reset --hard 874842444d4b85b076ad9c903da1bf40a47aa705
+    cd /homu && git reset --hard 53e210bbf40a9f0665d2766946d1a20770d81d3b
 RUN pip3 install -e /homu
 
 # Install local programs used:
