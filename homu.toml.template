@@ -81,6 +81,7 @@ reviewers = [
   "michaelwoerister",
   "Zoxc",
   "oli-obk",
+  "varkor",
 
   # dev tools
   "fitzgen",
