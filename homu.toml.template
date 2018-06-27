@@ -222,6 +222,7 @@ reviewers = [
   "ehuss",
   "steveklabnik",
   "Mark-Simulacrum",
+  "Eh2406",
 ]
 try_users = []
 [repo.cargo.branch]
