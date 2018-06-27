@@ -219,6 +219,7 @@ reviewers = [
   "huonw",
 
   # other
+  "ehuss",
   "steveklabnik",
   "Mark-Simulacrum",
 ]
