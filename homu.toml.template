@@ -107,6 +107,7 @@ reviewers = [
   # release
   # also on infra: "simulacrum",
   "pietroalbini",
+  "Aaronepower",
 
   # docs
   # also on core: "steveklabnik",
