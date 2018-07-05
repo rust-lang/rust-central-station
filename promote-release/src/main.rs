@@ -254,11 +254,11 @@ upload-addr = \"{}/{}\"
         prev_version == current_version
     }
 
-    /// An emergency fix for the current situation where the RLS isn't available
-    /// too often. Don't produce nightlies if a missing component happens.
+    /// An emergency fix for the current situation where the RLS or clippy often
+    /// aren't available. Don't produce nightlies if a component is missing.
     ///
-    /// Note that we already shouldn't merge PRs in rust-lang/rust that don't
-    /// build the rls/rustfmt
+    /// Note that we already don't merge PRs in rust-lang/rust that don't
+    /// build cargo
     fn assert_all_components_present(&self) {
         if self.release != "nightly" {
             return
@@ -274,6 +274,7 @@ upload-addr = \"{}/{}\"
         assert!(components.iter().any(|s| s.starts_with("rustc-")));
         assert!(components.iter().any(|s| s.starts_with("rust-std-")));
         assert!(components.iter().any(|s| s.starts_with("cargo-")));
+        assert!(components.iter().any(|s| s.starts_with("clippy-")));
     }
 
     fn download_artifacts(&mut self, rev: &str) {
