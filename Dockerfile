@@ -1,7 +1,7 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       g++ \
       curl \
       ca-certificates \
@@ -23,7 +23,8 @@ RUN apt-get update -y && \
       logrotate \
       file \
       ssmtp \
-      locales
+      locales \
+      zlib1g-dev
 
 # Set the system locales
 RUN locale-gen en_US.UTF-8
