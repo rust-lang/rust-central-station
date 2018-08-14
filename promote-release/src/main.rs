@@ -269,12 +269,12 @@ upload-addr = \"{}/{}\"
             .filter(|s| s.contains("x86_64-unknown-linux-gnu"))
             .collect::<Vec<_>>();
         println!("components in this nightly {:?}", components);
-        assert!(components.iter().any(|s| s.starts_with("rls-")));
-        assert!(components.iter().any(|s| s.starts_with("rustfmt-")));
         assert!(components.iter().any(|s| s.starts_with("rustc-")));
         assert!(components.iter().any(|s| s.starts_with("rust-std-")));
         assert!(components.iter().any(|s| s.starts_with("cargo-")));
-        assert!(components.iter().any(|s| s.starts_with("clippy-")));
+        // assert!(components.iter().any(|s| s.starts_with("rustfmt-")));
+        // assert!(components.iter().any(|s| s.starts_with("rls-")));
+        // assert!(components.iter().any(|s| s.starts_with("clippy-")));
     }
 
     fn download_artifacts(&mut self, rev: &str) {
