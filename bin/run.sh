@@ -10,7 +10,6 @@ chown root:syslog /var/log
 touch /var/log/cron.log
 
 # Background daemons we use here
-/usr/sbin/rsyslogd
 cron
 
 export RUST_BACKTRACE=1

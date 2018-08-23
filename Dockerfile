@@ -13,7 +13,6 @@ RUN apt-get update -y && \
       python3-pip \
       python3-setuptools \
       git \
-      rsyslog \
       nginx \
       letsencrypt \
       cron \
