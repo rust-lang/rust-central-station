@@ -6,7 +6,7 @@ secrets=/data/secrets.toml
 
 # We mounted /var/log from a local log dir, but ubuntu expects it to be owned by
 # root:syslog, so change it here
-chown root:syslog /var/log
+#chown root:syslog /var/log
 touch /var/log/cron.log
 
 # Background daemons we use here
