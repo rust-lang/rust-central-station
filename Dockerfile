@@ -9,6 +9,7 @@ RUN apt-get update -y && \
       make \
       libssl-dev \
       pkg-config \
+      python \
       python3-venv \
       python3-pip \
       python3-setuptools \
