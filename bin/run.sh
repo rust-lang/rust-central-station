@@ -37,7 +37,7 @@ if [ -z "$DEV" ]; then
 fi
 
 # Import the GPG key that's specified in the secrets file
-gpg --batch --import `tq dist.gpg-key < $secrets`
+gpg --import `tq dist.gpg-key < $secrets`
 
 # Configure email nagbot, which is run via cron
 rbars $secrets /src/ssmtp.conf.template > /etc/ssmtp/ssmtp.conf
