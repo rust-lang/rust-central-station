@@ -82,6 +82,11 @@ reviewers = [
   "Zoxc",
   "oli-obk",
   "varkor",
+  "nnethercote",
+  "tromey",
+  "davidtwco",
+  "wesleywiser",
+  "matthewjasper",
 
   # dev tools
   "fitzgen",
