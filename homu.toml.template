@@ -148,6 +148,7 @@ reviewers = [
   "rkruppe",
   "ollie27",
   "RalfJung",
+  "zackmdavis",
 ]
 
 # who has 'try' rights? (try, retry, force, clean, prioritization)
