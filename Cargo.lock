@@ -31,10 +31,10 @@ dependencies = [
 
 [[package]]
 name = "curl"
-version = "0.4.14"
+version = "0.4.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "curl-sys 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl-sys 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.43 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl-probe 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -46,7 +46,7 @@ dependencies = [
 
 [[package]]
 name = "curl-sys"
-version = "0.4.8"
+version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cc 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -230,7 +230,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "promote-release"
 version = "0.1.0"
 dependencies = [
- "curl 0.4.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl 0.4.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "flate2 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "fs2 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -495,8 +495,8 @@ dependencies = [
 "checksum cc 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)" = "2119ea4867bd2b8ed3aecab467709720b2d55b1bcfe09f772fd68066eaf15275"
 "checksum cfg-if 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "0c4e7bb64a8ebb0d856483e1e682ea3422f883c5f5615a90d51a2c82fe87fdd3"
 "checksum cloudabi 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"
-"checksum curl 0.4.14 (registry+https://github.com/rust-lang/crates.io-index)" = "444c2f9e71458b34e75471ed8d756947a0bb920b8b8b9bfc56dfcc4fc6819a13"
-"checksum curl-sys 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)" = "981bd902fcd8b8b999cf71b81447e27d66c3493a7f62f1372866fd32986c0c82"
+"checksum curl 0.4.15 (registry+https://github.com/rust-lang/crates.io-index)" = "a2f58080df27bc90d474e87714f32f35ba6d8a7e60ae92d1d991fc8812d23f21"
+"checksum curl-sys 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)" = "caae4b699b88e98cb0fc8a8d55efde1ee4142f816219d66fa2b7a450b202db16"
 "checksum filetime 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "da4b9849e77b13195302c174324b5ba73eec9b236b24c221a61000daefb95c5f"
 "checksum flate2 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)" = "37847f133aae7acf82bb9577ccd8bda241df836787642654286e79679826a54b"
 "checksum fs2 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)" = "9564fc758e15025b46aa6643b1b77d047d1a56a1aea6e01002ac0c7026876213"
