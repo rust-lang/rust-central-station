@@ -87,6 +87,8 @@ reviewers = [
   "davidtwco",
   "wesleywiser",
   "matthewjasper",
+  "tmandry",
+  "scalexm",
 
   # dev tools
   "fitzgen",
