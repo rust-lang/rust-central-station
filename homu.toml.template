@@ -218,22 +218,17 @@ timeout = 7200
 reviewers = [
   # cargo team
   "alexcrichton",
-  "carols10cents",
   "withoutboats",
-  "matklad",
   "wycats",
   "joshtriplett",
-  "aturon",
-
-  # alumni
-  "carllerche",
-  "huonw",
+  "ehuss",
+  "Eh2406",
+  "dwijnand",
+  "nrc",
 
   # other
-  "ehuss",
   "steveklabnik",
   "Mark-Simulacrum",
-  "Eh2406",
 ]
 try_users = []
 [repo.cargo.branch]
