@@ -10,6 +10,3 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/b
 
 # cancelling appveyor/travis builds if we don't need them
 */2 * * * * root /src/bin/cancelbot-rust.sh 2>&1 | logger --tag cancelbot-rust
-
-# Sending emails about triage tasks and such
-0 0 */2 * * root nag-rs /tmp/nagbot-token /src/naglist.txt 2>&1 | logger --tag nagbot

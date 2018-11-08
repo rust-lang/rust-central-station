@@ -1,9 +1,0 @@
-Root={{ nagbot.root }}
-Mailhub={{ nagbot.mailhub }}
-RewriteDomain={{ nagbot.rewrite-domain }}
-AuthUser={{ nagbot.user }}
-AuthPass={{ nagbot.password }}
-AuthMethod=LOGIN
-FromLineOverride=Yes
-UseTLS=Yes
-UseSTARTTLS=Yes
