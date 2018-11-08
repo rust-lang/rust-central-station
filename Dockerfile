@@ -41,11 +41,6 @@ RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
       --rev 421469ca2aeeb5e23a5201a6abe11080872af220
 
-# Install nag-rs, a bot for nagging the subteams
-RUN cargo install \
-      --git https://github.com/aturon/nag-rs \
-      --rev 28e62bcaf33f34540551dda23714e0be11bb0d84
-
 # Install homu, our integration daemon
 RUN git clone https://github.com/rust-ops/homu /homu && \
     cd /homu && git reset --hard 53e210bbf40a9f0665d2766946d1a20770d81d3b
@@ -68,14 +63,9 @@ COPY promote-release /tmp/promote-release
 RUN cargo install --path /tmp/promote-release && rm -rf /tmp/promote-release
 
 # Install commands used by promote-release binary. The awscli package is used to
-# issue cloudfront invalidations. The `boto` package is a dependency of
-# s3-directory-listing, and that's used to generate index.html files for our S3
-# bucket.
+# issue cloudfront invalidations.
 RUN pip3 install awscli
 RUN aws configure set preview.cloudfront true
-RUN git clone https://github.com/brson/s3-directory-listing /s3-directory-listing
-RUN pip3 install boto
-RUN cd /s3-directory-listing && git reset --hard 1dc88c6b0f6c4df470d35d1c212ee65147926064
 
 # Install our crontab which runs our various services on timers
 ADD crontab /etc/cron.d/rcs
