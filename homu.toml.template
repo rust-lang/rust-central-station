@@ -58,6 +58,7 @@ reviewers = [
   # also on core: "nikomatsakis",
   # also on core: "aturon",
   "joshtriplett",
+  "Centril",
 
   # libs
   # also on core: "alexcrichton",
@@ -167,7 +168,6 @@ try_users = [
   "Stokhos",
   "nox",
   "nnethercote",
-  "Centril",
 ]
 
 [repo.rust.github]
