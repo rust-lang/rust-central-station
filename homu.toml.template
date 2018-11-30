@@ -90,6 +90,7 @@ reviewers = [
   "matthewjasper",
   "tmandry",
   "scalexm",
+  "nikic",
 
   # dev tools
   "fitzgen",
