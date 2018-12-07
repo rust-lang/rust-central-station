@@ -347,3 +347,30 @@ secret = "{{ homu.repo-secrets.crater }}"
 context = "continuous-integration/travis-ci/push"
 [repo.crater.status.appveyor]
 context = "continuous-integration/appveyor/branch"
+
+[repo.clippy]
+owner = "rust-lang"
+name = "rust-clippy"
+timeout = 5400
+
+reviewers = [
+  "Manishearth",
+  "oli-obk",
+  "llogiq",
+  "mcarton",
+  "phansch",
+  "flip1995",
+  "birkenfeld",
+  "matthiaskrgr,
+  "mikerite",
+]
+try_users = []
+
+[repo.clippy.branch]
+auto = "auto"
+[repo.clippy.github]
+secret = "{{ homu.repo-secrets.clippy }}"
+[repo.clippy.status.travis]
+context = "continuous-integration/travis-ci/push"
+[repo.clippy.status.appveyor]
+context = "continuous-integration/appveyor/branch"
