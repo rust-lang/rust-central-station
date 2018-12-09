@@ -363,7 +363,7 @@ reviewers = [
   "phansch",
   "flip1995",
   "birkenfeld",
-  "matthiaskrgr,
+  "matthiaskrgr",
   "mikerite",
 ]
 try_users = []
