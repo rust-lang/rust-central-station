@@ -37,7 +37,7 @@ if [ -z "$DEV" ]; then
 fi
 
 # Import the GPG key that's specified in the secrets file
-gpg --batch --import `tq dist.gpg-key $secrets`
+gpg --batch --import `tq dist.gpg-key < $secrets`
 
 # Configure and run homu
 rbars $secrets /src/homu.toml.template > /tmp/homu.toml
