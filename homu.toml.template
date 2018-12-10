@@ -263,8 +263,6 @@ secret = "{{ homu.repo-secrets.libc }}"
 context = "continuous-integration/travis-ci/push"
 [repo.libc.status.appveyor]
 context = "continuous-integration/appveyor/branch"
-[repo.libc.status.cirrus]
-context = "stable x86_64-unknown-freebsd"
 
 [repo.rustup-rs]
 owner = "rust-lang-nursery"
