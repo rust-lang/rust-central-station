@@ -40,7 +40,7 @@ ENV PATH=$PATH:/root/.cargo/bin
 # them. This is how we keep a manageable queue on the two services
 RUN cargo install \
       --git https://github.com/alexcrichton/cancelbot \
-      --rev 421469ca2aeeb5e23a5201a6abe11080872af220
+      --rev 85a00cfbc399fb706e6245bcf874b4cb176ba942
 
 # Install homu, our integration daemon
 RUN git clone https://github.com/rust-ops/homu /homu && \
