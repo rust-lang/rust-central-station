@@ -376,3 +376,22 @@ secret = "{{ homu.repo-secrets.clippy }}"
 context = "continuous-integration/travis-ci/push"
 [repo.clippy.status.appveyor]
 context = "continuous-integration/appveyor/branch"
+
+[repo.crates-io]
+owner = "rust-lang"
+name = "crates.io"
+timeout = 5400
+
+reviewers = [
+  "carols10cents",
+  "sgrif",
+  "jtgeibel",
+]
+try_users = []
+
+[repo.crates-io.github]
+secret = "{{ homu.repo-secrets.crates-io }}"
+[repo.crates-io.checks.travis]
+name = "Travis CI - Branch"
+[repo.crater.status.appveyor]
+context = "continuous-integration/appveyor/branch"
