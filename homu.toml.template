@@ -345,8 +345,8 @@ try_users = []
 
 [repo.crater.github]
 secret = "{{ homu.repo-secrets.crater }}"
-[repo.crater.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.crater.checks.travis]
+name = "Travis CI - Branch"
 [repo.crater.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
