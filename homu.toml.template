@@ -169,6 +169,7 @@ try_users = [
   "Stokhos",
   "nox",
   "nnethercote",
+  "Xanewok",
 ]
 
 [repo.rust.github]
