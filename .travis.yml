@@ -1,5 +1,7 @@
 language: minimal
 script: docker build -t rust-central-station .
+before_deploy:
+  - pip install --user awscli; export PATH=$PATH:$HOME/.local/bin
 deploy:
   provider: script
   script: sh deploy.sh
