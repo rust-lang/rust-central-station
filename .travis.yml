@@ -1,2 +1,7 @@
 language: minimal
-script: docker build .
+script: docker build -t rust-central-station .
+deploy:
+  provider: script
+  script: sh deploy.sh
+  on:
+    branch: master
