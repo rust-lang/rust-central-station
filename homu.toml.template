@@ -237,8 +237,8 @@ try_users = []
 auto = "auto-cargo"
 [repo.cargo.github]
 secret = "{{ homu.repo-secrets.cargo }}"
-[repo.cargo.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.cargo.checks.travis]
+name = "Travis CI - Branch"
 [repo.cargo.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
@@ -260,15 +260,15 @@ auto = "auto-libc"
 [repo.libc.github]
 secret = "{{ homu.repo-secrets.libc }}"
 
-[repo.libc.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.libc.checks.travis]
+name = "Travis CI - Branch"
 [repo.libc.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 [repo.libc.checks.cirrus]
 name = "stable x86_64-unknown-freebsd"
 
 [repo.rustup-rs]
-owner = "rust-lang-nursery"
+owner = "rust-lang"
 name = "rustup.rs"
 timeout = 12600
 
@@ -285,8 +285,8 @@ auto = "auto"
 [repo.rustup-rs.github]
 secret = "{{ homu.repo-secrets.rustup }}"
 
-[repo.rustup-rs.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.rustup-rs.checks.travis]
+name = "Travis CI - Branch"
 [repo.rustup-rs.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
@@ -326,8 +326,8 @@ try_users = []
 auto = "auto"
 [repo.regex.github]
 secret = "{{ homu.repo-secrets.regex }}"
-[repo.regex.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.regex.checks.travis]
+name = "Travis CI - Branch"
 [repo.regex.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
@@ -373,8 +373,8 @@ try_users = []
 auto = "auto"
 [repo.clippy.github]
 secret = "{{ homu.repo-secrets.clippy }}"
-[repo.clippy.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.clippy.checks.travis]
+name = "Travis CI - Branch"
 [repo.clippy.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
