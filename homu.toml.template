@@ -306,8 +306,8 @@ auto = "auto"
 [repo.compiler-builtins.github]
 secret = "{{ homu.repo-secrets.compiler-builtins }}"
 
-[repo.compiler-builtins.status.travis]
-context = "continuous-integration/travis-ci/push"
+[repo.compiler-builtins.checks.travis]
+name = "Travis CI - Branch"
 [repo.compiler-builtins.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
