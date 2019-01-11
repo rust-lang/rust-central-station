@@ -92,6 +92,7 @@ reviewers = [
   "scalexm",
   "nikic",
   "alexreg",
+  "Xanewok",
 
   # dev tools
   "fitzgen",
