@@ -91,6 +91,7 @@ reviewers = [
   "tmandry",
   "scalexm",
   "nikic",
+  "alexreg",
 
   # dev tools
   "fitzgen",
