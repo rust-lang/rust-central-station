@@ -388,6 +388,7 @@ timeout = 5400
 reviewers = [
   "nrc",
   "Xanewok",
+  "alexheretic",
 ]
 try_users = []
 
