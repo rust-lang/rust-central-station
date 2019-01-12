@@ -380,6 +380,23 @@ name = "Travis CI - Branch"
 [repo.clippy.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
+[repo.rls]
+owner = "rust-lang"
+name = "rls"
+timeout = 5400
+
+reviewers = [
+  "nrc",
+  "Xanewok",
+  "alexheretic",
+]
+try_users = []
+
+[repo.rls.github]
+secret = "{{ homu.repo-secrets.rls }}"
+[repo.rls.checks.travis]
+name = "Travis CI - Branch"
+
 [repo.crates-io]
 owner = "rust-lang"
 name = "crates.io"
