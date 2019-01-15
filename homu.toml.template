@@ -413,5 +413,3 @@ try_users = []
 secret = "{{ homu.repo-secrets.crates-io }}"
 [repo.crates-io.checks.travis]
 name = "Travis CI - Branch"
-[repo.crates-io.status.appveyor]
-context = "continuous-integration/appveyor/branch"
