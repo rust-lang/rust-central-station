@@ -59,6 +59,7 @@ reviewers = [
   # also on core: "aturon",
   "joshtriplett",
   "Centril",
+  "scottmcm",
 
   # libs
   # also on core: "alexcrichton",
@@ -67,6 +68,7 @@ reviewers = [
   "Kimundi",
   "dtolnay",
   "SimonSapin",
+  "Amanieu",
   # also on core: "aturon",
 
   # compiler
