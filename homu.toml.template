@@ -215,6 +215,9 @@ remove = ['S-waiting-on-bors']
 add = ['S-waiting-on-author']
 unless = ['S-blocked', 'S-waiting-on-crater', 'S-waiting-on-team', 'S-waiting-on-review']
 
+[repo.rust.labels.succeed]
+add = ['merged-by-bors']
+
 
 [repo.cargo]
 owner = "rust-lang"
