@@ -4,4 +4,5 @@ members = [
   "rbars",
   "promote-release",
   "run-on-change",
+  "sync-mailgun",
 ]

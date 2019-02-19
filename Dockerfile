@@ -58,6 +58,8 @@ RUN pip3 install -e /homu
 #                     archives and publish them (also generate manifests)
 # * run-on-change - a command line program to run a command only when the
 #                   content of a web page changes
+# * sync-mailgun - a command line program to synchronize Mailgun mailing lists
+#                  with the team repo
 COPY tq /tmp/tq
 RUN cargo install --path /tmp/tq && rm -rf /tmp/tq
 COPY rbars /tmp/rbars
@@ -66,6 +68,8 @@ COPY promote-release /tmp/promote-release
 RUN cargo install --path /tmp/promote-release && rm -rf /tmp/promote-release
 COPY run-on-change /tmp/run-on-change
 RUN cargo install --path /tmp/run-on-change && rm -rf /tmp/run-on-change
+COPY sync-mailgun /tmp/sync-mailgun
+RUN cargo install --path /tmp/sync-mailgun && rm -rf /tmp/sync-mailgun
 
 # Install commands used by promote-release binary. The awscli package is used to
 # issue cloudfront invalidations.
