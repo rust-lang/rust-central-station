@@ -3,4 +3,6 @@ members = [
   "tq",
   "rbars",
   "promote-release",
+  "run-on-change",
+  "sync-mailgun",
 ]
