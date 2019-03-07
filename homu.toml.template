@@ -249,6 +249,29 @@ secret = "{{ homu.repo-secrets.cargo }}"
 name = "Travis CI - Branch"
 [repo.cargo.status.appveyor]
 context = "continuous-integration/appveyor/branch"
+[repo.cargo.labels.approved]   # after homu received `r+`
+remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
+add = ['S-waiting-on-bors']
+[repo.cargo.labels.rejected]   # after homu received `r-`
+remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
+add = ['S-waiting-on-author']
+[repo.cargo.labels.failed]     # test failed (maybe spurious, so fall back to -on-review)
+remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
+add = ['S-waiting-on-review']
+[repo.cargo.labels.timed_out]   # test timed out after 4 hours (almost always spurious, let reviewer retry)
+remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
+add = ['S-waiting-on-review']
+[repo.cargo.labels.try_failed]  # try-build failed (almost always legit, tell author to fix the PR)
+remove = ['S-waiting-on-review']
+add = ['S-waiting-on-author']
+[repo.cargo.labels.pushed]      # user pushed a commit after `r+`/`try`
+remove = ['S-waiting-on-bors', 'S-waiting-on-author']
+add = ['S-waiting-on-review']
+unless = ['S-blocked']
+[repo.cargo.labels.conflict]    # a merge conflict is detected (tell author to rebase)
+remove = ['S-waiting-on-bors']
+add = ['S-waiting-on-author']
+unless = ['S-blocked', 'S-waiting-on-review']
 
 [repo.libc]
 owner = "rust-lang"
