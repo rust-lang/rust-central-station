@@ -37,145 +37,10 @@ owner = "rust-lang"
 name = "rust"
 timeout = 14400
 
-# who has r+ rights?
-reviewers = [
-  # core
-  "nrc",
-  "alexcrichton",
-  "wycats",
-  "steveklabnik",
-  "nikomatsakis",
-  "carols10cents",
-  "aturon",
-  "erickt",
-
-  # lang
-  "cramertj",
-  "withoutboats",
-  "eddyb",
-  # also on core: "nrc",
-  "pnkfelix",
-  # also on core: "nikomatsakis",
-  # also on core: "aturon",
-  "joshtriplett",
-  "Centril",
-  "scottmcm",
-
-  # libs
-  # also on core: "alexcrichton",
-  "sfackler",
-  "BurntSushi",
-  "Kimundi",
-  "dtolnay",
-  "SimonSapin",
-  "Amanieu",
-  # also on core: "aturon",
-
-  # compiler
-  "arielb1",
-  # also on lang: "cramertj",
-  # also on lang: "eddyb",
-  "estebank",
-  # also on core: "nrc",
-  "petrochenkov",
-  # also on lang: "pnkfelix",
-  # also on core: "nikomatsakis",
-  "jseyfried",
-  "michaelwoerister",
-  "Zoxc",
-  "oli-obk",
-  "varkor",
-  "nnethercote",
-  "tromey",
-  "davidtwco",
-  "wesleywiser",
-  "matthewjasper",
-  "tmandry",
-  "scalexm",
-  "nikic",
-  "alexreg",
-  "Xanewok",
-
-  # dev tools
-  "fitzgen",
-  "japaric",
-  "jonathandturner",
-  "killercup",
-  "matklad",
-  # also on compiler: "michaelwoerister",
-  # also on core: "nrc",
-
-  # infra
-  # also on core: "alexcrichton",
-  "shepmaster",
-  "aidanhs",
-  "TimNN",
-  # also on core: "carols10cents",
-  "Mark-Simulacrum",
-  # also on core: "erickt",
-  "tomprince",
-  "kennytm",
-  # also on core: "aturon",
-
-  # release
-  # also on infra: "simulacrum",
-  "pietroalbini",
-  "Aaronepower",
-
-  # docs
-  # also on core: "steveklabnik",
-  "GuillaumeGomez",
-  "frewsxcv",
-  "QuietMisdreavus",
-
-  # alumni
-  "Aatch",
-  "pcwalton",
-  "huonw",
-  "dotdash",
-  "bkoropoff",
-
-  # bots
-  "bors",
-
-  # other
-  "FlaPer87",
-  "Luqmana",
-  "Manishearth",
-  "apasel422",
-  "bluss",
-  "bstrie",
-  "cmr",
-  "jdm",
-  "jroesch",
-  "kballard",
-  "sanxiyn",
-  "vadimcn",
-  "nagisa",
-  "KodrAus",
-  "rkruppe",
-  "ollie27",
-  "RalfJung",
-  "zackmdavis",
-]
-
-# who has 'try' rights? (try, retry, force, clean, prioritization)
-try_users = [
-  "est31",
-  "jkordish",
-  "sgrif",
-  "adrq",
-  "araz",
-  "batmanaod",
-  "gsollazzo",
-  "PramodBisht",
-  "cuviper",
-  "Stokhos",
-  "nox",
-  "nnethercote",
-  "Xanewok",
-  "ljedrz",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
+try_users = []
 
 [repo.rust.github]
 secret = "{{ homu.repo-secrets.rust }}"
@@ -225,22 +90,11 @@ owner = "rust-lang"
 name = "cargo"
 timeout = 7200
 
-reviewers = [
-  # cargo team
-  "alexcrichton",
-  "withoutboats",
-  "wycats",
-  "joshtriplett",
-  "ehuss",
-  "Eh2406",
-  "dwijnand",
-  "nrc",
-
-  # other
-  "steveklabnik",
-  "Mark-Simulacrum",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
+
 [repo.cargo.branch]
 auto = "auto-cargo"
 [repo.cargo.github]
@@ -278,11 +132,9 @@ owner = "rust-lang"
 name = "libc"
 timeout = 9000
 
-reviewers = [
-  "alexcrichton",
-  "malbarbo",
-  "gnzlbg",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.libc.branch]
@@ -303,11 +155,9 @@ owner = "rust-lang"
 name = "rustup.rs"
 timeout = 12600
 
-reviewers = [
-  "alexcrichton",
-  "Diggsey",
-  "nrc",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.rustup-rs.branch]
@@ -324,11 +174,10 @@ context = "continuous-integration/appveyor/branch"
 [repo.compiler-builtins]
 owner = "rust-lang-nursery"
 name = "compiler-builtins"
-reviewers = [
-  "alexcrichton",
-  "japaric",
-  "Amanieu",
-]
+
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.compiler-builtins.branch]
@@ -348,9 +197,9 @@ owner = "rust-lang"
 name = "regex"
 timeout = 5400
 
-reviewers = [
-  "BurntSushi",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.regex.branch]
@@ -368,11 +217,9 @@ owner = "rust-lang-nursery"
 name = "crater"
 timeout = 5400
 
-reviewers = [
-  "pietroalbini",
-  "aidanhs",
-  "Mark-Simulacrum",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.crater.github]
@@ -387,17 +234,9 @@ owner = "rust-lang"
 name = "rust-clippy"
 timeout = 5400
 
-reviewers = [
-  "Manishearth",
-  "oli-obk",
-  "llogiq",
-  "mcarton",
-  "phansch",
-  "flip1995",
-  "birkenfeld",
-  "matthiaskrgr",
-  "mikerite",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.clippy.branch]
@@ -414,11 +253,9 @@ owner = "rust-lang"
 name = "rls"
 timeout = 5400
 
-reviewers = [
-  "nrc",
-  "Xanewok",
-  "alexheretic",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.rls.github]
@@ -431,11 +268,9 @@ owner = "rust-lang"
 name = "crates.io"
 timeout = 5400
 
-reviewers = [
-  "carols10cents",
-  "sgrif",
-  "jtgeibel",
-]
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
 try_users = []
 
 [repo.crates-io.github]
