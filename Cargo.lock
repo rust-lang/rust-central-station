@@ -128,7 +128,7 @@ name = "curl"
 version = "0.4.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "curl-sys 0.4.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl-sys 0.4.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.51 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl-probe 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -140,7 +140,7 @@ dependencies = [
 
 [[package]]
 name = "curl-sys"
-version = "0.4.17"
+version = "0.4.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cc 1.0.35 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -937,7 +937,7 @@ dependencies = [
 "checksum crc 1.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d663548de7f5cca343f1e0a48d14dcfb0e9eb4e079ec58883b7251539fa10aeb"
 "checksum crc32fast 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ba125de2af0df55319f41944744ad91c71113bf74a4646efff39afe1f6842db1"
 "checksum curl 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)" = "bed4741d1d4e1fc1ba6786c1313057c609259785cde2c45e34602acc45fd6ccc"
-"checksum curl-sys 0.4.17 (registry+https://github.com/rust-lang/crates.io-index)" = "7b8d8e51964f58c8053337fcef48e1c4608c7ee70c6f2e457674a97dda5a5828"
+"checksum curl-sys 0.4.18 (registry+https://github.com/rust-lang/crates.io-index)" = "9d91a0052d5b982887d8e829bee0faffc7218ea3c6ebd3d6c2c8f678a93c9a42"
 "checksum digest 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "05f47366984d3ad862010e22c7ce81a7dbcaebbdfb37241a620f8b6596ee135c"
 "checksum env_logger 0.5.13 (registry+https://github.com/rust-lang/crates.io-index)" = "15b0a4d2e39f8420210be8b27eeda28029729e2fd4291019455016c348240c38"
 "checksum failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "795bd83d3abeb9220f257e597aa0080a508b27533824adf336529648f6abf7e2"
