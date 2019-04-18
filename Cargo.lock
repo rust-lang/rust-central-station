@@ -125,7 +125,7 @@ dependencies = [
 
 [[package]]
 name = "curl"
-version = "0.4.20"
+version = "0.4.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "curl-sys 0.4.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -440,7 +440,7 @@ dependencies = [
 name = "promote-release"
 version = "0.1.0"
 dependencies = [
- "curl 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl 0.4.21 (registry+https://github.com/rust-lang/crates.io-index)",
  "flate2 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "fs2 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -613,7 +613,7 @@ dependencies = [
 name = "run-on-change"
 version = "0.1.0"
 dependencies = [
- "curl 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl 0.4.21 (registry+https://github.com/rust-lang/crates.io-index)",
  "sha1 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -743,7 +743,7 @@ dependencies = [
 name = "sync-mailgun"
 version = "0.1.0"
 dependencies = [
- "curl 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl 0.4.21 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.5.13 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -936,7 +936,7 @@ dependencies = [
 "checksum cloudabi 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"
 "checksum crc 1.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d663548de7f5cca343f1e0a48d14dcfb0e9eb4e079ec58883b7251539fa10aeb"
 "checksum crc32fast 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ba125de2af0df55319f41944744ad91c71113bf74a4646efff39afe1f6842db1"
-"checksum curl 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)" = "bed4741d1d4e1fc1ba6786c1313057c609259785cde2c45e34602acc45fd6ccc"
+"checksum curl 0.4.21 (registry+https://github.com/rust-lang/crates.io-index)" = "a85f2f95f2bd277d316d1aa8a477687ab4a6942258c7db7c89c187534669979c"
 "checksum curl-sys 0.4.18 (registry+https://github.com/rust-lang/crates.io-index)" = "9d91a0052d5b982887d8e829bee0faffc7218ea3c6ebd3d6c2c8f678a93c9a42"
 "checksum digest 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "05f47366984d3ad862010e22c7ce81a7dbcaebbdfb37241a620f8b6596ee135c"
 "checksum env_logger 0.5.13 (registry+https://github.com/rust-lang/crates.io-index)" = "15b0a4d2e39f8420210be8b27eeda28029729e2fd4291019455016c348240c38"
