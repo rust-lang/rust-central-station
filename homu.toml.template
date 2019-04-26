@@ -326,3 +326,20 @@ unless = ['S-blocked', 'S-waiting-on-review']
 
 [repo.rustlings.labels.succeed]
 add = ['merged-by-bors']
+
+[repo.hashbrown]
+owner = "rust-lang"
+name = "hashbrown"
+timeout = 5400
+
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
+try_users = []
+
+[repo.hashbrown.branch]
+auto = "auto"
+[repo.hashbrown.github]
+secret = "{{ homu.repo-secrets.hashbrown }}"
+[repo.hashbrown.checks.travis]
+name = "Travis CI - Branch"
