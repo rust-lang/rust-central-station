@@ -1,0 +1,2 @@
+*.toml.template linguist-language=TOML
+*.toml.example linguist-language=TOML
