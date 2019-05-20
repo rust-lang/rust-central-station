@@ -1,8 +1,9 @@
 [workspace]
 members = [
-  "tq",
-  "rbars",
+  "cancelbot",
   "promote-release",
+  "rbars",
   "run-on-change",
   "sync-mailgun",
+  "tq",
 ]
