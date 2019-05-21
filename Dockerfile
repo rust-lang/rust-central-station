@@ -36,12 +36,6 @@ ENV LC_ALL en_US.UTF-8
 RUN curl https://sh.rustup.rs | sh -s -- -y
 ENV PATH=$PATH:/root/.cargo/bin
 
-# Install cancelbot, a bot that cancels AppVeyor/Travis builds if we don't need
-# them. This is how we keep a manageable queue on the two services
-RUN cargo install \
-      --git https://github.com/alexcrichton/cancelbot \
-      --rev 28d2b26a8298e3e0e03e859fceb796c62e81c181
-
 # Install homu, our integration daemon
 RUN git clone https://github.com/rust-lang/homu /homu && \
     cd /homu && git reset --hard 5ffafdb1e94fa87334d4851a57564425e11a569e
@@ -60,6 +54,8 @@ RUN pip3 install -e /homu
 #                   content of a web page changes
 # * sync-mailgun - a command line program to synchronize Mailgun mailing lists
 #                  with the team repo
+# * cancelbot - bot that cancels AppVeyor/Travis builds if we don't need them.
+#               This is how we keep a manageable queue on the two services
 COPY tq /tmp/tq
 RUN cargo install --path /tmp/tq && rm -rf /tmp/tq
 COPY rbars /tmp/rbars
@@ -70,6 +66,8 @@ COPY run-on-change /tmp/run-on-change
 RUN cargo install --path /tmp/run-on-change && rm -rf /tmp/run-on-change
 COPY sync-mailgun /tmp/sync-mailgun
 RUN cargo install --path /tmp/sync-mailgun && rm -rf /tmp/sync-mailgun
+COPY cancelbot /tmp/cancelbot
+RUN cargo install --path /tmp/cancelbot && rm -rf /tmp/cancelbot
 
 # Install commands used by promote-release binary. The awscli package is used to
 # issue cloudfront invalidations.

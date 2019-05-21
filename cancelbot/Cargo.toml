@@ -1,0 +1,15 @@
+[package]
+name = "cancelbot"
+version = "0.1.0"
+authors = ["Alex Crichton <alex@alexcrichton.com>"]
+
+[dependencies]
+base64 = "0.10"
+curl = "0.4"
+error-chain = "0.5"
+futures = "0.1"
+getopts = "0.2"
+rustc-serialize = "0.3"
+time = "0.1"
+tokio-core = "0.1"
+tokio-curl = "0.1"
