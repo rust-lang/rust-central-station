@@ -147,8 +147,10 @@ secret = "{{ homu.repo-secrets.libc }}"
 name = "Travis CI - Branch"
 [repo.libc.status.appveyor]
 context = "continuous-integration/appveyor/branch"
-[repo.libc.checks.cirrus]
-name = "stable x86_64-unknown-freebsd"
+[repo.libc.checks.cirrus-freebsd-11]
+name = "stable x86_64-unknown-freebsd-11"
+[repo.libc.checks.cirrus-freebsd-12]
+name = "nightly x86_64-unknown-freebsd-12"
 
 [repo.rustup-rs]
 owner = "rust-lang"
