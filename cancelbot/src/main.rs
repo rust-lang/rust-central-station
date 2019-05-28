@@ -327,7 +327,7 @@ impl State {
 
     fn check_azure_pipelines_repo(&self, repo: Repo) -> MyFuture<()> {
         let url = format!(
-            "/{}/{}/_apis/build/builds?api-version=5.0&branch=refs/heads/{}",
+            "/{}/{}/_apis/build/builds?api-version=5.0&branchName=refs/heads/{}",
             repo.user, repo.name, self.branch,
         );
         let history = http::azure_pipelines_get(&self.session, &url, &self.azure_pipelines_token);
@@ -336,7 +336,6 @@ impl State {
         let repo2 = repo.clone();
         let cancel_old = history.and_then(move |list: azure::List| {
             let max = list.value.iter().map(|b| b.id).max();
-            println!("azure max {:?}", max);
             let mut futures = Vec::new();
             for build in list.value.iter() {
                 if !me.azure_build_running(build) {
