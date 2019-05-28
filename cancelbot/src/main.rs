@@ -336,6 +336,7 @@ impl State {
         let repo2 = repo.clone();
         let cancel_old = history.and_then(move |list: azure::List| {
             let max = list.value.iter().map(|b| b.id).max();
+            println!("azure max {:?}", max);
             let mut futures = Vec::new();
             for build in list.value.iter() {
                 if !me.azure_build_running(build) {
