@@ -362,3 +362,5 @@ auto = "auto"
 secret = "{{ homu.repo-secrets.miri }}"
 [repo.miri.checks.travis]
 name = "Travis CI - Branch"
+[repo.miri.status.appveyor]
+context = "continuous-integration/appveyor/branch"
