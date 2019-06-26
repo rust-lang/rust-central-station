@@ -31,4 +31,5 @@ pub struct Timeline {
 pub struct Record {
     pub name: String,
     pub result: String,
+    pub r#type: String,
 }

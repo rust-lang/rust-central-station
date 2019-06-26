@@ -361,7 +361,7 @@ impl State {
                 let me2 = me.clone();
                 let build = build.clone();
                 let cancel_first = timeline.and_then(move |list: azure::Timeline| {
-                    if list.records.iter().any(|r| r.result == "failed") {
+                    if list.records.iter().any(|r| r.result == "failed" && r.r#type == "Job") {
                         me2.azure_cancel_build(&repo3, &build)
                     } else {
                         Box::new(futures::future::ok(()))
