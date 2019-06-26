@@ -337,17 +337,37 @@ impl State {
         let cancel_old = history.and_then(move |list: azure::List| {
             let max = list.value.iter().map(|b| b.id).max();
             let mut futures = Vec::new();
-            for build in list.value.iter() {
+            for (i, build) in list.value.iter().enumerate() {
                 if !me.azure_build_running(build) {
                     continue;
                 }
                 if build.id < max.unwrap_or(0) {
-                    println!(
-                        "azure cancelling {} as it's not the latest",
-                        build.id,
-                    );
+                    println!("azure cancelling {} as it's not the latest", build.id);
                     futures.push(me.azure_cancel_build(&repo2, build));
+                    continue;
                 }
+                if i != 0 {
+                    continue;
+                }
+
+                // If this is the first build look at the timeline (jobs) and if
+                // anything failed then cancel the job.
+                let timeline = http::azure_pipelines_get(
+                    &me.session,
+                    &build._links.timeline.href,
+                    &me.azure_pipelines_token,
+                );
+                let repo3 = repo2.clone();
+                let me2 = me.clone();
+                let build = build.clone();
+                let cancel_first = timeline.and_then(move |list: azure::Timeline| {
+                    if list.records.iter().any(|r| r.result == "failed") {
+                        me2.azure_cancel_build(&repo3, &build)
+                    } else {
+                        Box::new(futures::future::ok(()))
+                    }
+                });
+                futures.push(Box::new(cancel_first));
             }
             futures::collect(futures)
         });
@@ -369,6 +389,5 @@ impl State {
         );
         let body = "{\"status\":\"Cancelling\"}";
         http::azure_patch(&self.session, &url, &self.azure_pipelines_token, body)
-
     }
 }
