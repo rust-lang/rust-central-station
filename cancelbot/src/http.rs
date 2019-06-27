@@ -15,6 +15,14 @@ static APPVEYOR_API_BASE: &str = "https://ci.appveyor.com/api";
 static AZURE_API_BASE: &str = "https://dev.azure.com";
 static AGENT: &str = "User-Agent: cancelbot (github.com/rust-lang/rust-central-station)";
 
+fn append_url(host: &str, url: &str) -> String {
+    if url.starts_with("http://") {
+        url.to_string()
+    } else {
+        format!("{}{}", host, url)
+    }
+}
+
 #[allow(dead_code)]
 pub struct Response {
     easy: Easy,
@@ -26,7 +34,7 @@ pub fn travis_get<T>(sess: &Session, url: &str, token: &str) -> MyFuture<T>
 where
     T: Decodable + 'static,
 {
-    let url = format!("{}{}", TRAVIS_API_BASE, url);
+    let url = append_url(TRAVIS_API_BASE, url);
     let headers = vec![
         format!("Authorization: token {}", token),
         format!("Accept: application/vnd.travis-ci.2+json"),
@@ -40,7 +48,7 @@ pub fn travis_post(sess: &Session, url: &str, token: &str) -> MyFuture<()> {
         format!("Accept: application/vnd.travis-ci.2+json"),
     ];
 
-    let response = post(sess, &format!("{}{}", TRAVIS_API_BASE, url), &headers);
+    let response = post(sess, &append_url(TRAVIS_API_BASE, url), &headers);
     Box::new(response.map(|_| ()))
 }
 
@@ -53,7 +61,7 @@ where
         format!("Accept: application/json"),
     ];
 
-    get_json(sess, &format!("{}{}", APPVEYOR_API_BASE, url), &headers)
+    get_json(sess, &append_url(APPVEYOR_API_BASE, url), &headers)
 }
 
 pub fn appveyor_delete(sess: &Session, url: &str, token: &str) -> MyFuture<()> {
@@ -62,7 +70,7 @@ pub fn appveyor_delete(sess: &Session, url: &str, token: &str) -> MyFuture<()> {
         format!("Accept: application/json"),
     ];
 
-    let response = delete(sess, &format!("{}{}", APPVEYOR_API_BASE, url), &headers);
+    let response = delete(sess, &append_url(APPVEYOR_API_BASE, url), &headers);
     Box::new(response.map(|_| ()))
 }
 
@@ -76,7 +84,7 @@ where
         format!("Accept: application/json"),
     ];
 
-    get_json(sess, &format!("{}{}", AZURE_API_BASE, url), &headers)
+    get_json(sess, &append_url(AZURE_API_BASE, url), &headers)
 }
 
 pub fn azure_patch(sess: &Session, url: &str, token: &str, body: &str) -> MyFuture<()> {
@@ -87,7 +95,7 @@ pub fn azure_patch(sess: &Session, url: &str, token: &str, body: &str) -> MyFutu
         format!("Content-Type: application/json"),
     ];
 
-    let response = patch(sess, &format!("{}{}", AZURE_API_BASE, url), &headers, body);
+    let response = patch(sess, &append_url(AZURE_API_BASE, url), &headers, body);
     Box::new(response.map(|_| ()))
 }
 
