@@ -155,6 +155,10 @@ impl Context {
         self.publish_release();
 
         self.invalidate_cloudfront();
+
+        // Clean up after ourselves to avoid leaving gigabytes of artifacts
+        // around.
+        drop(fs::remove_dir_all(&self.dl_dir()));
     }
 
     fn configure_rust(&mut self, rev: &str) {
