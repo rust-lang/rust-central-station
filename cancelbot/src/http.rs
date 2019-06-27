@@ -16,7 +16,7 @@ static AZURE_API_BASE: &str = "https://dev.azure.com";
 static AGENT: &str = "User-Agent: cancelbot (github.com/rust-lang/rust-central-station)";
 
 fn append_url(host: &str, url: &str) -> String {
-    if url.starts_with("http://") {
+    if url.starts_with("https://") {
         url.to_string()
     } else {
         format!("{}{}", host, url)
