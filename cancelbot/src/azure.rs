@@ -30,6 +30,6 @@ pub struct Timeline {
 #[derive(RustcDecodable, Debug)]
 pub struct Record {
     pub name: String,
-    pub result: String,
+    pub result: Option<String>,
     pub r#type: String,
 }
