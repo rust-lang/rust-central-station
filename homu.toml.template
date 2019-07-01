@@ -198,26 +198,6 @@ name = "Travis CI - Branch"
 context = "continuous-integration/appveyor/branch"
 
 
-[repo.regex]
-owner = "rust-lang"
-name = "regex"
-timeout = 5400
-
-# Permissions managed through rust-lang/team
-rust_team = true
-reviewers = []
-try_users = []
-
-[repo.regex.branch]
-auto = "auto"
-[repo.regex.github]
-secret = "{{ homu.repo-secrets.regex }}"
-[repo.regex.checks.travis]
-name = "Travis CI - Branch"
-[repo.regex.status.appveyor]
-context = "continuous-integration/appveyor/branch"
-
-
 [repo.crater]
 owner = "rust-lang-nursery"
 name = "crater"
