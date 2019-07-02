@@ -44,15 +44,9 @@ try_users = []
 
 [repo.rust.github]
 secret = "{{ homu.repo-secrets.rust }}"
-[repo.rust.checks.travis]
-name = "Travis CI - Branch"
-try = false
 [repo.rust.checks.azure]
 name = "auto"
 try_name = "try"
-[repo.rust.status.appveyor]
-context = "continuous-integration/appveyor/branch"
-try = false
 
 # Automatic relabeling
 [repo.rust.labels.approved]   # after homu received `r+`
