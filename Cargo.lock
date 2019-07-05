@@ -378,7 +378,7 @@ dependencies = [
  "pest 2.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "pest_derive 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "quick-error 1.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "regex 1.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "regex 1.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.94 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.40 (registry+https://github.com/rust-lang/crates.io-index)",
  "walkdir 2.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -838,7 +838,7 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.1.7"
+version = "1.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "aho-corasick 0.7.4 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1519,7 +1519,7 @@ dependencies = [
 "checksum rdrand 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "678054eb77286b51581ba43620cc911abf02758c91f93f479767aed0f90458b2"
 "checksum redox_syscall 0.1.55 (registry+https://github.com/rust-lang/crates.io-index)" = "cbd093aba707641a1ebf784490f00ceb889b21953774de1d5fba05d1ee1d283c"
 "checksum redox_termios 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "7e891cfe48e9100a70a3b6eb652fef28920c117d366339687bd5576160db0f76"
-"checksum regex 1.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "0b2f0808e7d7e4fb1cb07feb6ff2f4bc827938f24f8c2e6a3beb7370af544bdd"
+"checksum regex 1.1.8 (registry+https://github.com/rust-lang/crates.io-index)" = "1325e8a57b7da4cbcb38b3957112f729990bad0a18420e7e250ef6b1d9a15763"
 "checksum regex-syntax 0.6.7 (registry+https://github.com/rust-lang/crates.io-index)" = "9d76410686f9e3a17f06128962e0ecc5755870bb890c34820c7af7f1db2e1d48"
 "checksum rust_team_data 1.0.0 (git+https://github.com/rust-lang/team)" = "<none>"
 "checksum rustc-demangle 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)" = "a7f4dccf6f4891ebcc0c39f9b6eb1a83b9bf5d747cb439ec6fba4f3b977038af"
