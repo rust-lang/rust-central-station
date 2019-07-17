@@ -126,6 +126,14 @@ impl Sync {
                 }
             } else {
                 info!("{}: user {} is missing, adding them...", slug, username);
+                // If the user is not a member of the org and they *don't* have a pending
+                // invitation this will send the invite email and add the membership in a "pending"
+                // state.
+                //
+                // If the user didn't accept the invitation yet the next time the tool runs, the
+                // method will be called again. Thankfully though in that case GitHub doesn't send
+                // yet another invitation email to the user, but treats the API call as a noop, so
+                // it's safe to do it multiple times.
                 self.github.set_membership(&team, username, expected_role)?;
             }
         }
