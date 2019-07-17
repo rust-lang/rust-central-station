@@ -54,6 +54,8 @@ RUN pip3 install -e /homu
 #                   content of a web page changes
 # * sync-mailgun - a command line program to synchronize Mailgun mailing lists
 #                  with the team repo
+# * sync-github - a command line program to synchronize GitHub teams with the
+#                 team repo
 # * cancelbot - bot that cancels AppVeyor/Travis builds if we don't need them.
 #               This is how we keep a manageable queue on the two services
 COPY tq /tmp/tq
@@ -66,6 +68,8 @@ COPY run-on-change /tmp/run-on-change
 RUN cargo install --path /tmp/run-on-change && rm -rf /tmp/run-on-change
 COPY sync-mailgun /tmp/sync-mailgun
 RUN cargo install --path /tmp/sync-mailgun && rm -rf /tmp/sync-mailgun
+COPY sync-github /tmp/sync-github
+RUN cargo install --path /tmp/sync-github && rm -rf /tmp/sync-github
 COPY cancelbot /tmp/cancelbot
 RUN cargo install --path /tmp/cancelbot && rm -rf /tmp/cancelbot
 
