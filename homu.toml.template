@@ -97,10 +97,8 @@ try_users = []
 auto = "auto-cargo"
 [repo.cargo.github]
 secret = "{{ homu.repo-secrets.cargo }}"
-[repo.cargo.checks.travis]
-name = "Travis CI - Branch"
-[repo.cargo.status.appveyor]
-context = "continuous-integration/appveyor/branch"
+[repo.cargo.checks.azure]
+name = "rust-lang.cargo"
 [repo.cargo.labels.approved]   # after homu received `r+`
 remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
 add = ['S-waiting-on-bors']
