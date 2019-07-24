@@ -191,7 +191,7 @@ context = "continuous-integration/appveyor/branch"
 
 
 [repo.crater]
-owner = "rust-lang-nursery"
+owner = "rust-lang"
 name = "crater"
 timeout = 5400
 
