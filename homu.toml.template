@@ -148,6 +148,24 @@ name = "stable x86_64-unknown-freebsd-11"
 [repo.libc.checks.cirrus-freebsd-12]
 name = "nightly x86_64-unknown-freebsd-12"
 
+[repo.stdarch]
+owner = "rust-lang"
+name = "stdarch"
+timeout = 9000
+
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
+try_users = []
+
+[repo.stdarch.github]
+secret = "{{ homu.repo-secrets.stdarch }}"
+
+[repo.stdarch.checks.azure]
+name = "rust-lang.stdarch"
+[repo.stdarch.checks.cirrus-freebsd]
+name = "x86_64-unknown-freebsd"
+
 [repo.rustup-rs]
 owner = "rust-lang"
 name = "rustup.rs"
