@@ -257,11 +257,10 @@ upload-addr = \"{}/{}\"
         prev_version == current_version
     }
 
-    /// An emergency fix for the current situation where the RLS or clippy often
-    /// aren't available. Don't produce nightlies if a component is missing.
+    /// Make sure this release comes with a minimum of components.
     ///
     /// Note that we already don't merge PRs in rust-lang/rust that don't
-    /// build cargo
+    /// build cargo, so this cannot realistically fail.
     fn assert_all_components_present(&self) {
         if self.release != "nightly" {
             return
@@ -275,6 +274,7 @@ upload-addr = \"{}/{}\"
         assert!(components.iter().any(|s| s.starts_with("rustc-")));
         assert!(components.iter().any(|s| s.starts_with("rust-std-")));
         assert!(components.iter().any(|s| s.starts_with("cargo-")));
+        // For now, produce nightlies even if these are missing.
         // assert!(components.iter().any(|s| s.starts_with("rustfmt-")));
         // assert!(components.iter().any(|s| s.starts_with("rls-")));
         // assert!(components.iter().any(|s| s.starts_with("clippy-")));
