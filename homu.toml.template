@@ -139,10 +139,8 @@ auto = "auto-libc"
 [repo.libc.github]
 secret = "{{ homu.repo-secrets.libc }}"
 
-[repo.libc.checks.azure]
-name = "rust-lang.libc"
-[repo.libc.status.appveyor]
-context = "continuous-integration/appveyor/branch"
+[repo.libc.status.azure]
+context = "rust-lang.libc"
 [repo.libc.checks.cirrus-freebsd-11]
 name = "stable x86_64-unknown-freebsd-11"
 [repo.libc.checks.cirrus-freebsd-12]
