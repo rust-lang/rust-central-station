@@ -256,8 +256,8 @@ try_users = []
 
 [repo.rls.github]
 secret = "{{ homu.repo-secrets.rls }}"
-[repo.rls.checks.travis]
-name = "Travis CI - Branch"
+[repo.rls.checks.azure]
+name = "rust-lang.rls"
 
 [repo.crates-io]
 owner = "rust-lang"
