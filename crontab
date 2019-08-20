@@ -8,8 +8,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/b
 20 3 * * * root promote-release /tmp/beta beta /data/secrets.toml 2>&1 | logger --tag release-beta
 40 * * * * root promote-release /tmp/stable stable /data/secrets-dev.toml 2>&1 | logger --tag release-stable
 
-# cancelling appveyor/travis builds if we don't need them
+# cancelling appveyor/travis/azure builds if we don't need them
 */2 * * * * root /src/bin/cancelbot-rust.sh 2>&1 | logger --tag cancelbot-rust
+*/2 * * * * root /src/bin/cancelbot-azure-rust-lang2.sh 2>&1 | logger --tag cancelbot-azure-rust-lang2
 
 # synchronizing mailgun every 5 minutes
 */5 * * * * root /src/bin/sync-mailgun.sh 2>&1 | logger --tag sync-mailgun

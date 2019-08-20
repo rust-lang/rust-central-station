@@ -10,6 +10,7 @@ extern crate error_chain;
 
 use std::collections::HashMap;
 use std::env;
+use std::sync::Arc;
 use std::time::Duration;
 
 use errors::*;
@@ -27,17 +28,18 @@ macro_rules! t {
     };
 }
 
-type MyFuture<T> = Box<Future<Item = T, Error = BorsError>>;
+type MyFuture<T> = Box<dyn Future<Item = T, Error = BorsError>>;
 
 #[derive(Clone)]
 struct State {
-    travis_token: String,
-    appveyor_token: String,
+    travis_token: Option<String>,
+    appveyor_token: Option<String>,
+    azure_pipelines_token: Option<String>,
     session: Session,
     repos: Vec<Repo>,
     branch: String,
-    appveyor_account_name: String,
-    azure_pipelines_token: String,
+    appveyor_account_name: Option<String>,
+    azure_pipelines_org: Option<String>,
 }
 
 #[derive(Clone)]
@@ -55,11 +57,12 @@ mod travis;
 fn main() {
     let args = env::args().skip(1).collect::<Vec<_>>();
     let mut opts = Options::new();
-    opts.reqopt("t", "travis", "travis token", "TOKEN");
-    opts.reqopt("a", "appveyor", "appveyor token", "TOKEN");
     opts.reqopt("b", "branch", "branch to work with", "BRANCH");
+    opts.optopt("t", "travis", "travis token", "TOKEN");
+    opts.optopt("a", "appveyor", "appveyor token", "TOKEN");
     opts.optopt("", "appveyor-account", "appveyor account name", "ACCOUNT");
     opts.optopt("", "azure-pipelines-token", "", "TOKEN");
+    opts.optopt("", "azure-pipelines-org", "", "ORGANIZATION");
 
     let usage = || -> ! {
         println!("{}", opts.usage("usage: ./foo -a ... -t ..."));
@@ -78,8 +81,8 @@ fn main() {
     let handle = core.handle();
 
     let state = State {
-        travis_token: matches.opt_str("t").unwrap(),
-        appveyor_token: matches.opt_str("a").unwrap(),
+        travis_token: matches.opt_str("t"),
+        appveyor_token: matches.opt_str("a"),
         repos: matches
             .free
             .iter()
@@ -93,8 +96,9 @@ fn main() {
             .collect(),
         session: Session::new(handle.clone()),
         branch: matches.opt_str("b").unwrap(),
-        appveyor_account_name: matches.opt_str("appveyor-account").unwrap(),
-        azure_pipelines_token: matches.opt_str("azure-pipelines-token").unwrap(),
+        appveyor_account_name: matches.opt_str("appveyor-account"),
+        azure_pipelines_token: matches.opt_str("azure-pipelines-token"),
+        azure_pipelines_org: matches.opt_str("azure-pipelines-org"),
     };
 
     core.run(state.check(&handle)).unwrap();
@@ -145,17 +149,21 @@ impl State {
     }
 
     fn check_travis(&self) -> MyFuture<()> {
-        let futures = self
-            .repos
-            .iter()
-            .map(|repo| self.check_travis_repo(repo.clone()))
-            .collect::<Vec<_>>();
+        let futures = if let Some(token) = &self.travis_token {
+            let token = Arc::new(token.clone());
+            self.repos
+                .iter()
+                .map(|repo| self.check_travis_repo(repo.clone(), token.clone()))
+                .collect::<Vec<_>>()
+        } else {
+            Vec::new()
+        };
         Box::new(futures::collect(futures).map(|_| ()))
     }
 
-    fn check_travis_repo(&self, repo: Repo) -> MyFuture<()> {
+    fn check_travis_repo(&self, repo: Repo, token: Arc<String>) -> MyFuture<()> {
         let url = format!("/repos/{}/{}/builds", repo.user, repo.name);
-        let history = http::travis_get(&self.session, &url, &self.travis_token);
+        let history = http::travis_get(&self.session, &url, &token);
 
         let me = self.clone();
         let cancel_old = history.and_then(move |list: travis::GetBuilds| {
@@ -188,13 +196,13 @@ impl State {
                     continue;
                 }
                 if build.number == max.unwrap_or(0).to_string() {
-                    futures.push(me.travis_cancel_if_jobs_failed(build));
+                    futures.push(me.travis_cancel_if_jobs_failed(build, token.clone()));
                 } else {
                     println!(
                         "travis cancelling {} in {} as it's not the latest",
                         build.number, build.state
                     );
-                    futures.push(me.travis_cancel_build(build));
+                    futures.push(me.travis_cancel_build(build, token.clone()));
                 }
             }
             futures::collect(futures)
@@ -203,9 +211,13 @@ impl State {
         Box::new(cancel_old.map(|_| ()))
     }
 
-    fn travis_cancel_if_jobs_failed(&self, build: &travis::Build) -> MyFuture<()> {
+    fn travis_cancel_if_jobs_failed(
+        &self,
+        build: &travis::Build,
+        token: Arc<String>,
+    ) -> MyFuture<()> {
         let url = format!("/builds/{}", build.id);
-        let build = http::travis_get(&self.session, &url, &self.travis_token);
+        let build = http::travis_get(&self.session, &url, &token);
         let me = self.clone();
         let cancel = build.and_then(move |b: travis::GetBuild| {
             let cancel = b.jobs.iter().any(|job| match &job.state[..] {
@@ -215,7 +227,7 @@ impl State {
 
             if cancel {
                 println!("cancelling top build {} as a job failed", b.build.number);
-                me.travis_cancel_build(&b.build)
+                me.travis_cancel_build(&b.build, token)
             } else {
                 Box::new(futures::finished(()))
             }
@@ -231,29 +243,36 @@ impl State {
         }
     }
 
-    fn travis_cancel_build(&self, build: &travis::Build) -> MyFuture<()> {
+    fn travis_cancel_build(&self, build: &travis::Build, token: Arc<String>) -> MyFuture<()> {
         let url = format!("/builds/{}/cancel", build.id);
-        http::travis_post(&self.session, &url, &self.travis_token)
+        http::travis_post(&self.session, &url, &token)
     }
 
     fn check_appveyor(&self) -> MyFuture<()> {
-        let futures = self
-            .repos
-            .iter()
-            .map(|repo| self.check_appveyor_repo(repo.clone()))
-            .collect::<Vec<_>>();
+        let futures = if let Some(token) = &self.appveyor_token {
+            let token = Arc::new(token.clone());
+            self.repos
+                .iter()
+                .map(|repo| self.check_appveyor_repo(repo.clone(), token.clone()))
+                .collect::<Vec<_>>()
+        } else {
+            Vec::new()
+        };
         Box::new(futures::collect(futures).map(|_| ()))
     }
 
-    fn check_appveyor_repo(&self, repo: Repo) -> MyFuture<()> {
+    fn check_appveyor_repo(&self, repo: Repo, token: Arc<String>) -> MyFuture<()> {
         let url = format!(
             "/projects/{}/{}/history?recordsNumber=10&branch={}",
-            self.appveyor_account_name, repo.name, self.branch
+            self.appveyor_account_name.as_ref().unwrap_or(&repo.name),
+            repo.name,
+            self.branch
         );
-        let history = http::appveyor_get(&self.session, &url, &self.appveyor_token);
+        let history = http::appveyor_get(&self.session, &url, &token);
 
         let me = self.clone();
         let repo2 = repo.clone();
+        let token2 = token.clone();
         let cancel_old = history.and_then(move |history: appveyor::History| {
             let max = history.builds.iter().map(|b| b.buildNumber).max();
             let mut futures = Vec::new();
@@ -266,7 +285,7 @@ impl State {
                         "appveyor cancelling {} as it's not the latest",
                         build.buildNumber
                     );
-                    futures.push(me.appveyor_cancel_build(&repo2, build));
+                    futures.push(me.appveyor_cancel_build(&repo2, build, token2.clone()));
                 }
             }
             futures::collect(futures)
@@ -275,9 +294,11 @@ impl State {
         let me = self.clone();
         let url = format!(
             "/projects/{}/{}/branch/{}",
-            self.appveyor_account_name, repo.name, self.branch
+            self.appveyor_account_name.as_ref().unwrap_or(&repo.name),
+            repo.name,
+            self.branch
         );
-        let last_build = http::appveyor_get(&self.session, &url, &self.appveyor_token);
+        let last_build = http::appveyor_get(&self.session, &url, &token);
         let me = me.clone();
         let cancel_if_failed = last_build.and_then(move |last: appveyor::LastBuild| {
             if !me.appveyor_build_running(&last.build) {
@@ -293,7 +314,7 @@ impl State {
                     "appveyor cancelling {} as a job is {}",
                     last.build.buildNumber, job.status
                 );
-                return me.appveyor_cancel_build(&repo, &last.build);
+                return me.appveyor_cancel_build(&repo, &last.build, token);
             }
             Box::new(futures::finished(()))
         });
@@ -308,29 +329,42 @@ impl State {
         }
     }
 
-    fn appveyor_cancel_build(&self, repo: &Repo, build: &appveyor::Build) -> MyFuture<()> {
+    fn appveyor_cancel_build(
+        &self,
+        repo: &Repo,
+        build: &appveyor::Build,
+        token: Arc<String>,
+    ) -> MyFuture<()> {
         let url = format!(
             "/builds/{}/{}/{}",
-            self.appveyor_account_name, repo.name, build.version
+            self.appveyor_account_name.as_ref().unwrap_or(&repo.name),
+            repo.name,
+            build.version
         );
-        http::appveyor_delete(&self.session, &url, &self.appveyor_token)
+        http::appveyor_delete(&self.session, &url, &token)
     }
 
     fn check_azure_pipelines(&self) -> MyFuture<()> {
-        let futures = self
-            .repos
-            .iter()
-            .map(|repo| self.check_azure_pipelines_repo(repo.clone()))
-            .collect::<Vec<_>>();
+        let futures = if let Some(token) = &self.azure_pipelines_token {
+            let token = Arc::new(token.clone());
+            self.repos
+                .iter()
+                .map(|repo| self.check_azure_pipelines_repo(repo.clone(), token.clone()))
+                .collect::<Vec<_>>()
+        } else {
+            Vec::new()
+        };
         Box::new(futures::collect(futures).map(|_| ()))
     }
 
-    fn check_azure_pipelines_repo(&self, repo: Repo) -> MyFuture<()> {
+    fn check_azure_pipelines_repo(&self, repo: Repo, token: Arc<String>) -> MyFuture<()> {
         let url = format!(
             "/{}/{}/_apis/build/builds?api-version=5.0&branchName=refs/heads/{}",
-            repo.user, repo.name, self.branch,
+            self.azure_pipelines_org.as_ref().unwrap_or(&repo.user),
+            repo.name,
+            self.branch,
         );
-        let history = http::azure_pipelines_get(&self.session, &url, &self.azure_pipelines_token);
+        let history = http::azure_pipelines_get(&self.session, &url, &token);
 
         let me = self.clone();
         let repo2 = repo.clone();
@@ -343,7 +377,7 @@ impl State {
                 }
                 if build.id < max.unwrap_or(0) {
                     println!("azure cancelling {} as it's not the latest", build.id);
-                    futures.push(me.azure_cancel_build(&repo2, build));
+                    futures.push(me.azure_cancel_build(&repo2, build, token.clone()));
                     continue;
                 }
                 if i != 0 {
@@ -352,20 +386,18 @@ impl State {
 
                 // If this is the first build look at the timeline (jobs) and if
                 // anything failed then cancel the job.
-                let timeline = http::azure_pipelines_get(
-                    &me.session,
-                    &build._links.timeline.href,
-                    &me.azure_pipelines_token,
-                );
+                let timeline =
+                    http::azure_pipelines_get(&me.session, &build._links.timeline.href, &token);
                 let repo3 = repo2.clone();
                 let me2 = me.clone();
                 let build = build.clone();
+                let token2 = token.clone();
                 let cancel_first = timeline.and_then(move |list: azure::Timeline| {
                     if list.records.iter().any(|r| {
                         r.result.as_ref().map(|s| s == "failed").unwrap_or(false)
                             && r.r#type == "Job"
                     }) {
-                        me2.azure_cancel_build(&repo3, &build)
+                        me2.azure_cancel_build(&repo3, &build, token2)
                     } else {
                         Box::new(futures::future::ok(()))
                     }
@@ -385,12 +417,19 @@ impl State {
         }
     }
 
-    fn azure_cancel_build(&self, repo: &Repo, build: &azure::Build) -> MyFuture<()> {
+    fn azure_cancel_build(
+        &self,
+        repo: &Repo,
+        build: &azure::Build,
+        token: Arc<String>,
+    ) -> MyFuture<()> {
         let url = format!(
             "/{}/{}/_apis/build/builds/{}?api-version=5.0",
-            repo.user, repo.name, build.id,
+            self.azure_pipelines_org.as_ref().unwrap_or(&repo.user),
+            repo.name,
+            build.id,
         );
         let body = "{\"status\":\"Cancelling\"}";
-        http::azure_patch(&self.session, &url, &self.azure_pipelines_token, body)
+        http::azure_patch(&self.session, &url, &token, body)
     }
 }
