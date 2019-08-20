@@ -39,6 +39,7 @@ struct State {
     repos: Vec<Repo>,
     branch: String,
     appveyor_account_name: Option<String>,
+    azure_pipelines_org: Option<String>,
 }
 
 #[derive(Clone)]
@@ -61,6 +62,7 @@ fn main() {
     opts.optopt("a", "appveyor", "appveyor token", "TOKEN");
     opts.optopt("", "appveyor-account", "appveyor account name", "ACCOUNT");
     opts.optopt("", "azure-pipelines-token", "", "TOKEN");
+    opts.optopt("", "azure-pipelines-org", "", "ORGANIZATION");
 
     let usage = || -> ! {
         println!("{}", opts.usage("usage: ./foo -a ... -t ..."));
@@ -96,6 +98,7 @@ fn main() {
         branch: matches.opt_str("b").unwrap(),
         appveyor_account_name: matches.opt_str("appveyor-account"),
         azure_pipelines_token: matches.opt_str("azure-pipelines-token"),
+        azure_pipelines_org: matches.opt_str("azure-pipelines-org"),
     };
 
     core.run(state.check(&handle)).unwrap();
@@ -357,7 +360,9 @@ impl State {
     fn check_azure_pipelines_repo(&self, repo: Repo, token: Arc<String>) -> MyFuture<()> {
         let url = format!(
             "/{}/{}/_apis/build/builds?api-version=5.0&branchName=refs/heads/{}",
-            repo.user, repo.name, self.branch,
+            self.azure_pipelines_org.as_ref().unwrap_or(&repo.user),
+            repo.name,
+            self.branch,
         );
         let history = http::azure_pipelines_get(&self.session, &url, &token);
 
@@ -420,7 +425,9 @@ impl State {
     ) -> MyFuture<()> {
         let url = format!(
             "/{}/{}/_apis/build/builds/{}?api-version=5.0",
-            repo.user, repo.name, build.id,
+            self.azure_pipelines_org.as_ref().unwrap_or(&repo.user),
+            repo.name,
+            build.id,
         );
         let body = "{\"status\":\"Cancelling\"}";
         http::azure_patch(&self.session, &url, &token, body)
