@@ -27,7 +27,7 @@ macro_rules! t {
     };
 }
 
-type MyFuture<T> = Box<Future<Item = T, Error = BorsError>>;
+type MyFuture<T> = Box<dyn Future<Item = T, Error = BorsError>>;
 
 #[derive(Clone)]
 struct State {
