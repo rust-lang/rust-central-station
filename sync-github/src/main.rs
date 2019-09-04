@@ -30,9 +30,10 @@ impl Sync {
         debug!("caching mapping between user ids and usernames");
         let users = teams
             .iter()
-            .filter(|t| t.github.is_some())
-            .flat_map(|t| t.members.iter())
-            .map(|member| member.github_id)
+            .filter_map(|t| t.github.as_ref().map(|gh| &gh.teams))
+            .flat_map(|teams| teams)
+            .flat_map(|team| &team.members)
+            .copied()
             .collect::<HashSet<_>>();
         let usernames_cache = github.usernames(&users.into_iter().collect::<Vec<_>>())?;
 
@@ -60,18 +61,14 @@ impl Sync {
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
-                    self.synchronize(team, github_team)?;
+                    self.synchronize(github_team)?;
                 }
             }
         }
         Ok(())
     }
 
-    fn synchronize(
-        &self,
-        rust_team: &rust_team_data::v1::Team,
-        github_team: &rust_team_data::v1::GitHubTeam,
-    ) -> Result<(), Error> {
+    fn synchronize(&self, github_team: &rust_team_data::v1::GitHubTeam) -> Result<(), Error> {
         let slug = format!("{}/{}", github_team.org, github_team.name);
         debug!("synchronizing {}", slug);
 
@@ -100,10 +97,10 @@ impl Sync {
         let mut current_members = self.github.team_memberships(&team)?;
 
         // Ensure all expected members are in the team
-        for member in &rust_team.members {
-            let expected_role = self.expected_role(&github_team.org, member.github_id);
-            let username = &self.usernames_cache[&member.github_id];
-            if let Some(member) = current_members.remove(&member.github_id) {
+        for member in &github_team.members {
+            let expected_role = self.expected_role(&github_team.org, *member);
+            let username = &self.usernames_cache[member];
+            if let Some(member) = current_members.remove(&member) {
                 if member.role != expected_role {
                     info!(
                         "{}: user {} has the role {} instead of {}, changing them...",
