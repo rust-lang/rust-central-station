@@ -35,7 +35,7 @@ port = 7942
 [repo.rust]
 owner = "rust-lang"
 name = "rust"
-timeout = 14400
+timeout = 15300
 
 # Permissions managed through rust-lang/team
 rust_team = true
