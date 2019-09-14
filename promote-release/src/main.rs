@@ -138,8 +138,8 @@ impl Context {
         self.assert_all_components_present();
 
         // Ok we've now determined that a release needs to be done. Let's
-        // configure rust, sign the artifacts we just downloaded, and upload the
-        // signatures to the CI bucket.
+        // configure rust, build a manifest and sign the artifacts we just downloaded, and upload the
+        // signatures and manifest to the CI bucket.
         self.configure_rust(rev);
         self.sign_artifacts();
         self.upload_signatures(&rev);
@@ -340,8 +340,10 @@ upload-addr = \"{}/{}\"
         }
     }
 
+    /// Create manifest and sign the artifacts.
     fn sign_artifacts(&mut self) {
         let build = self.build_dir();
+        // This calls `src/tools/build-manifest` from the rustc repo.
         run(Command::new(self.rust_dir().join("x.py"))
                     .current_dir(&build)
                     .arg("dist")
