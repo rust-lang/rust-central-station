@@ -141,6 +141,8 @@ secret = "{{ homu.repo-secrets.libc }}"
 
 [repo.libc.status.azure]
 context = "rust-lang.libc"
+[repo.libc.checks.cirrus-freebsd-10]
+name = "nightly x86_64-unknown-freebsd-10"
 [repo.libc.checks.cirrus-freebsd-11]
 name = "stable x86_64-unknown-freebsd-11"
 [repo.libc.checks.cirrus-freebsd-12]
