@@ -54,11 +54,17 @@ impl Context {
     fn run(&mut self) {
         let _lock = self.lock();
         self.update_repo();
-        let branch = match &self.release[..] {
-            "nightly" => "master",
-            "beta" => "beta",
-            "stable" => "stable",
-            _ => panic!("unknown release: {}", self.release),
+
+        let override_var = env::var("PROMOTE_RELEASE_OVERRIDE_BRANCH");
+        let branch = if let Ok(branch) = override_var.as_ref() {
+            branch
+        } else {
+            match &self.release[..] {
+                "nightly" => "master",
+                "beta" => "beta",
+                "stable" => "stable",
+                _ => panic!("unknown release: {}", self.release),
+            }
         };
         self.do_release(branch);
     }
