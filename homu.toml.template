@@ -262,7 +262,7 @@ name = "rust-lang.rls"
 [repo.crates-io]
 owner = "rust-lang"
 name = "crates.io"
-timeout = 5400
+timeout = 1800
 
 # Permissions managed through rust-lang/team
 rust_team = true
