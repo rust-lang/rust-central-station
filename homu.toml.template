@@ -239,10 +239,12 @@ try_users = []
 auto = "auto"
 [repo.clippy.github]
 secret = "{{ homu.repo-secrets.clippy }}"
-[repo.clippy.checks.travis]
-name = "Travis CI - Branch"
-[repo.clippy.status.appveyor]
-context = "continuous-integration/appveyor/branch"
+[repo.clippy.checks.action_test]
+name = "bors test finished"
+[repo.clippy.checks.action_dev_test]
+name = "bors dev test finished"
+[repo.clippy.checks.action_remark_test]
+name = "bors remark test finished"
 
 [repo.rls]
 owner = "rust-lang"
