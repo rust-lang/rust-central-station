@@ -38,7 +38,7 @@ http {
 
     add_header Strict-Transport-Security max-age=15768000;
 
-    server_name  {{ nginx.hostname }};
+    server_name  {{ nginx.hostname }} {{ nginx.hostname_alias }};
 
     access_log  /var/log/nginx/{{ nginx.hostname }}.access.log;
 
@@ -54,7 +54,7 @@ http {
 
   server {
     listen 80;
-    server_name {{ nginx.hostname }};
+    server_name {{ nginx.hostname }} {{ nginx.hostname_alias }};
     return 301 https://$host$request_uri;
   }
 }
