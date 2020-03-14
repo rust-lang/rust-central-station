@@ -26,7 +26,7 @@ if [ -z "$DEV" ]; then
         --agree-tos \
         -m `tq nginx.email < $secrets` \
         -w /usr/share/nginx/html \
-        -d `tq nginx.hostname < $secrets`
+        -d `tq nginx.hostname < $secrets`,`tq nginx.hostname_alias < $secrets`
 
     nginx -s stop
   fi
