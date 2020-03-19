@@ -49,8 +49,8 @@ name = "rust"
 [repo.rust.github]
 secret = "{{ homu.repo-secrets.rust }}"
 [repo.rust.checks.azure]
-name = "auto"
-try_name = "try"
+name = "fork-auto"
+try_name = "fork-try"
 
 # Automatic relabeling
 [repo.rust.labels.approved]   # after homu received `r+`
