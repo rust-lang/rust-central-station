@@ -359,8 +359,10 @@ impl State {
 
     fn check_azure_pipelines_repo(&self, repo: Repo, token: Arc<String>) -> MyFuture<()> {
         let url = format!(
-            "/{}/{}/_apis/build/builds?api-version=5.0&branchName=refs/heads/{}",
+            "/{}/{}/_apis/build/builds?api-version=5.0&repositoryType=GitHub&repositoryId={}/{}&branchName=refs/heads/{}",
             self.azure_pipelines_org.as_ref().unwrap_or(&repo.user),
+            repo.name,
+            repo.user,
             repo.name,
             self.branch,
         );
