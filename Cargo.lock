@@ -264,7 +264,7 @@ name = "curl"
 version = "0.4.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "curl-sys 0.4.23 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl-sys 0.4.30+curl-7.69.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.65 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl-probe 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl-sys 0.9.52 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -275,7 +275,7 @@ dependencies = [
 
 [[package]]
 name = "curl-sys"
-version = "0.4.23"
+version = "0.4.30+curl-7.69.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cc 1.0.46 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1971,7 +1971,7 @@ dependencies = [
 "checksum crossbeam-queue 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7c979cd6cfe72335896575c6b5688da489e420d36a27a0b9eb0c73db574b4a4b"
 "checksum crossbeam-utils 0.6.6 (registry+https://github.com/rust-lang/crates.io-index)" = "04973fa96e96579258a5091af6003abde64af786b860f18622b82e026cca60e6"
 "checksum curl 0.4.25 (registry+https://github.com/rust-lang/crates.io-index)" = "06aa71e9208a54def20792d877bc663d6aae0732b9852e612c4a933177c31283"
-"checksum curl-sys 0.4.23 (registry+https://github.com/rust-lang/crates.io-index)" = "f71cd2dbddb49c744c1c9e0b96106f50a634e8759ec51bcd5399a578700a3ab3"
+"checksum curl-sys 0.4.30+curl-7.69.1 (registry+https://github.com/rust-lang/crates.io-index)" = "923b38e423a8f47a4058e96f2a1fa2865a6231097ee860debd678d244277d50c"
 "checksum dbghelp-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "97590ba53bcb8ac28279161ca943a924d1fd4a8fb3fa63302591647c4fc5b850"
 "checksum digest 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f3d0c8c8752312f9713efd397ff63acb9f85585afbf179282e720e7704954dd5"
 "checksum dtoa 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "4358a9e11b9a09cf52383b451b49a169e8d797b68aa02301ff586d70d9661ea3"
