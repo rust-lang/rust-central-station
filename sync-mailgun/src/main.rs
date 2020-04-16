@@ -35,7 +35,7 @@ struct List {
 fn mangle_lists(mut lists: team_data::Lists) -> Result<Vec<List>, Error> {
     let mut result = Vec::new();
 
-    for (_key, list) in lists.lists.drain(..) {
+    for (_key, list) in lists.lists.into_iter() {
         let base_list = List {
             address: mangle_address(&list.address)?,
             members: Vec::new(),
