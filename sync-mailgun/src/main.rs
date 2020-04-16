@@ -164,4 +164,13 @@ mod tests {
             "forward(\"baz@example.net\")",
         ], build_route_actions(&list).collect::<Vec<_>>());
     }
+
+    #[test]
+    fn test_mangle_address() {
+        assert_eq!(
+            r"^list-name(?:\+.+)?@example\.com$",
+            mangle_address("list-name@example.com").unwrap()
+        );
+        assert!(mangle_address("list-name.example.com").is_err());
+    }
 }
