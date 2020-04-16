@@ -14,6 +14,7 @@ pub struct Route {
     pub actions: Vec<String>,
     pub expression: String,
     pub id: String,
+    pub priority: i32,
     pub description: serde_json::Value,
 }
 
