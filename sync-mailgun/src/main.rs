@@ -94,14 +94,18 @@ fn run() -> Result<(), Error> {
     Ok(())
 }
 
+fn build_route_actions(list: &team_data::List) -> impl Iterator<Item = String> + '_ {
+    list.members.iter().map(|member| format!("forward(\"{}\")", member))
+}
+
 fn create(new: &team_data::List) -> Result<(), Error> {
     let mut form = Form::new();
     form.part("priority").contents(b"0").add()?;
     form.part("description").contents(DESCRIPTION.as_bytes()).add()?;
     let expr = format!("match_recipient(\"{}\")", new.address);
     form.part("expression").contents(expr.as_bytes()).add()?;
-    for member in new.members.iter() {
-        form.part("action").contents(format!("forward(\"{}\")", member).as_bytes()).add()?;
+    for action in build_route_actions(new) {
+        form.part("action").contents(action.as_bytes()).add()?;
     }
     http::post::<Empty>("/routes", form)?;
 
@@ -120,8 +124,8 @@ fn sync(route: &api::Route, list: &team_data::List) -> Result<(), Error> {
     }
 
     let mut form = Form::new();
-    for member in list.members.iter() {
-        form.part("action").contents(format!("forward(\"{}\")", member).as_bytes()).add()?;
+    for action in build_route_actions(list) {
+        form.part("action").contents(action.as_bytes()).add()?;
     }
     http::put::<Empty>(&format!("/routes/{}", route.id), form)?;
 
@@ -137,4 +141,27 @@ fn extract<'a>(s: &'a str, prefix: &str, suffix: &str) -> &'a str {
     assert!(s.starts_with(prefix), "`{}` didn't start with `{}`", s, prefix);
     assert!(s.ends_with(suffix), "`{}` didn't end with `{}`", s, suffix);
     &s[prefix.len()..s.len() - suffix.len()]
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_build_route_actions() {
+        let list = team_data::List {
+            address: "list@example.com".into(),
+            members: vec![
+                "foo@example.com".into(),
+                "bar@example.com".into(),
+                "baz@example.net".into(),
+            ],
+        };
+
+        assert_eq!(vec![
+            "forward(\"foo@example.com\")",
+            "forward(\"bar@example.com\")",
+            "forward(\"baz@example.net\")",
+        ], build_route_actions(&list).collect::<Vec<_>>());
+    }
 }
