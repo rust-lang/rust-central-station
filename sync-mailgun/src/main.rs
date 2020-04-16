@@ -1,13 +1,12 @@
 mod api;
+mod http;
 
-use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
-use std::env;
 use std::str;
 
 use crate::api::Empty;
-use curl::easy::{Easy, Form};
-use failure::{bail, format_err, Error, ResultExt};
+use curl::easy::{Form};
+use failure::{bail, Error, ResultExt};
 use rust_team_data::v1 as team_data;
 
 const DESCRIPTION: &str = "managed by an automatic script on github";
@@ -43,7 +42,7 @@ fn run() -> Result<(), Error> {
     } else {
         format!("{}/lists.json", team_data::BASE_URL)
     };
-    let mut mailmap = get::<team_data::Lists>(&api_url)?;
+    let mut mailmap = http::get::<team_data::Lists>(&api_url)?;
 
     // Mangle all the mailing list addresses
     for list in mailmap.lists.values_mut() {
@@ -51,7 +50,7 @@ fn run() -> Result<(), Error> {
     }
 
     let mut routes = Vec::new();
-    let mut response = get::<api::RoutesResponse>("/routes")?;
+    let mut response = http::get::<api::RoutesResponse>("/routes")?;
     let mut cur = 0;
     while response.items.len() > 0 {
         cur += response.items.len();
@@ -60,7 +59,7 @@ fn run() -> Result<(), Error> {
             break
         }
         let url = format!("/routes?skip={}", cur);
-        response = get::<api::RoutesResponse>(&url)?;
+        response = http::get::<api::RoutesResponse>(&url)?;
     }
 
     let mut addr2list = HashMap::new();
@@ -104,7 +103,7 @@ fn create(new: &team_data::List) -> Result<(), Error> {
     for member in new.members.iter() {
         form.part("action").contents(format!("forward(\"{}\")", member).as_bytes()).add()?;
     }
-    post::<Empty>("/routes", form)?;
+    http::post::<Empty>("/routes", form)?;
 
     Ok(())
 }
@@ -124,117 +123,14 @@ fn sync(route: &api::Route, list: &team_data::List) -> Result<(), Error> {
     for member in list.members.iter() {
         form.part("action").contents(format!("forward(\"{}\")", member).as_bytes()).add()?;
     }
-    put::<Empty>(&format!("/routes/{}", route.id), form)?;
+    http::put::<Empty>(&format!("/routes/{}", route.id), form)?;
 
     Ok(())
 }
 
 fn del(route: &api::Route) -> Result<(), Error> {
-    delete::<Empty>(&format!("/routes/{}", route.id))?;
+    http::delete::<Empty>(&format!("/routes/{}", route.id))?;
     Ok(())
-}
-
-fn get<T: for<'de> serde::Deserialize<'de>>(url: &str) -> Result<T, Error> {
-    execute(url, Method::Get)
-}
-
-fn post<T: for<'de> serde::Deserialize<'de>>(
-    url: &str,
-    form: Form,
-) -> Result<T, Error> {
-    execute(url, Method::Post(form))
-}
-
-fn put<T: for<'de> serde::Deserialize<'de>>(
-    url: &str,
-    form: Form,
-) -> Result<T, Error> {
-    execute(url, Method::Put(form))
-}
-
-fn delete<T: for<'de> serde::Deserialize<'de>>(url: &str) -> Result<T, Error> {
-    execute(url, Method::Delete)
-}
-
-enum Method {
-    Get,
-    Delete,
-    Post(Form),
-    Put(Form),
-}
-
-fn execute<T: for<'de> serde::Deserialize<'de>>(
-    url: &str,
-    method: Method,
-) -> Result<T, Error> {
-    thread_local!(static HANDLE: RefCell<Easy> = RefCell::new(Easy::new()));
-    let password = env::var("MAILGUN_API_TOKEN")
-        .map_err(|_| format_err!("must set $MAILGUN_API_TOKEN"))?;
-    let result = HANDLE.with(|handle| {
-        let mut handle = handle.borrow_mut();
-        handle.reset();
-        let url = if url.starts_with("http://") || url.starts_with("https://") {
-            url.to_string()
-        } else {
-            format!("https://api.mailgun.net/v3{}", url)
-        };
-        handle.url(&url)?;
-        match method {
-            Method::Get => {
-                log::debug!("GET {}", url);
-                handle.get(true)?;
-            }
-            Method::Delete => {
-                log::debug!("DELETE {}", url);
-                handle.custom_request("DELETE")?;
-            }
-            Method::Post(form) => {
-                log::debug!("POST {}", url);
-                handle.httppost(form)?;
-            }
-            Method::Put(form) => {
-                log::debug!("PUT {}", url);
-                handle.httppost(form)?;
-                handle.custom_request("PUT")?;
-            }
-        }
-        // Add the API key only for Mailgun requests
-        if url.starts_with("https://api.mailgun.net") {
-            handle.username("api")?;
-            handle.password(&password)?;
-        }
-        handle.useragent("rust-lang/rust membership update")?;
-        // handle.verbose(true)?;
-        let mut result = Vec::new();
-        let mut headers = Vec::new();
-        {
-            let mut transfer = handle.transfer();
-            transfer.write_function(|data| {
-                result.extend_from_slice(data);
-                Ok(data.len())
-            })?;
-            transfer.header_function(|header| {
-                if let Ok(s) = str::from_utf8(header) {
-                    headers.push(s.to_string());
-                }
-                true
-            })?;
-            transfer.perform()?;
-        }
-
-        let result = String::from_utf8(result)
-            .map_err(|_| format_err!("response was invalid utf-8"))?;
-
-        log::trace!("headers: {:#?}", headers);
-        log::trace!("json: {}", result);
-        let code = handle.response_code()?;
-        if code != 200 {
-            bail!("failed to get a 200 code, got {}\n\n{}", code, result)
-        }
-        Ok(serde_json::from_str(&result)
-            .with_context(|_| "failed to parse json response")?)
-    });
-    Ok(result.with_context(|_| format!("failed to send request to {}", url))?)
 }
 
 fn extract<'a>(s: &'a str, prefix: &str, suffix: &str) -> &'a str {
