@@ -32,7 +32,7 @@ struct List {
     priority: i32,
 }
 
-fn mangle_lists(mut lists: team_data::Lists) -> Result<Vec<List>, Error> {
+fn mangle_lists(lists: team_data::Lists) -> Result<Vec<List>, Error> {
     let mut result = Vec::new();
 
     for (_key, list) in lists.lists.into_iter() {
