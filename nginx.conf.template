@@ -42,13 +42,17 @@ http {
 
     access_log  /var/log/nginx/{{ nginx.hostname }}.access.log;
 
+    location ~ /.well-known {
+      root /usr/share/nginx/html;
+      allow all;
+    }
+
     location /homu/ {
             proxy_pass   http://localhost:7942/;
     }
 
-    location ~ /.well-known {
-      root /usr/share/nginx/html;
-      allow all;
+    location / {
+            proxy_pass   http://localhost:7942/;
     }
   }
 
