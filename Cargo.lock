@@ -18,7 +18,7 @@ name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "hermit-abi 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hermit-abi 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.71 (registry+https://github.com/rust-lang/crates.io-index)",
  "winapi 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -532,7 +532,7 @@ dependencies = [
 
 [[package]]
 name = "hermit-abi"
-version = "0.1.13"
+version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.2.71 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -853,7 +853,7 @@ name = "num_cpus"
 version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "hermit-abi 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hermit-abi 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.71 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -990,7 +990,7 @@ dependencies = [
  "curl 0.4.29 (registry+https://github.com/rust-lang/crates.io-index)",
  "flate2 1.0.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "fs2 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "rand 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.55 (registry+https://github.com/rust-lang/crates.io-index)",
  "tar 0.4.28 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml 0.4.10 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2013,7 +2013,7 @@ dependencies = [
 "checksum getrandom 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)" = "7abc8dd8451921606d809ba32e95b6111925cd2906060d2dcc29c070220503eb"
 "checksum h2 0.1.26 (registry+https://github.com/rust-lang/crates.io-index)" = "a5b34c246847f938a410a03c5458c7fee2274436675e76d8b903c08efc29c462"
 "checksum handlebars 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d82e5750d8027a97b9640e3fefa66bbaf852a35228e1c90790efd13c4b09c166"
-"checksum hermit-abi 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)" = "91780f809e750b0a89f5544be56617ff6b1227ee485bcb06ebe10cdf89bd3b71"
+"checksum hermit-abi 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)" = "b9586eedd4ce6b3c498bc3b4dd92fc9f11166aa908a914071953768066c67909"
 "checksum http 0.1.21 (registry+https://github.com/rust-lang/crates.io-index)" = "d6ccf5ede3a895d8856620237b2f02972c1bbc78d2965ad7fe8838d4a0ed41f0"
 "checksum http-body 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6741c859c1b2463a423a1dbce98d418e6c3c3fc720fb0d45528657320920292d"
 "checksum httparse 1.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "cd179ae861f0c2e53da70d892f5f3029f9594be0c41dc5269cd371691b1dc2f9"
