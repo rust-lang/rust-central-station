@@ -38,7 +38,7 @@ ENV PATH=$PATH:/root/.cargo/bin
 
 # Install homu, our integration daemon
 RUN git clone https://github.com/rust-lang/homu /homu && \
-    cd /homu && git reset --hard 0fd6fd6851e92b8191c4ce2b57761c5f4c2a4e8e
+    cd /homu && git reset --hard 27de04afee5e3539035dcb748426cc76e5303004
 RUN pip3 install -e /homu
 
 # Install local programs used:
