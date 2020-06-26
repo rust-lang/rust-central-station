@@ -1,9 +1,0 @@
-[package]
-name = "run-on-change"
-version = "0.1.0"
-authors = ["Pietro Albini <pietro@pietroalbini.org>"]
-edition = "2018"
-
-[dependencies]
-sha1 = "0.6"
-curl = "0.4"

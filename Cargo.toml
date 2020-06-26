@@ -3,8 +3,5 @@ members = [
   "cancelbot",
   "promote-release",
   "rbars",
-  "run-on-change",
-  "sync-mailgun",
-  "sync-github",
   "tq",
 ]

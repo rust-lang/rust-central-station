@@ -11,9 +11,3 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/b
 # cancelling appveyor/travis/azure builds if we don't need them
 */2 * * * * root /src/bin/cancelbot-rust.sh 2>&1 | logger --tag cancelbot-rust
 */2 * * * * root /src/bin/cancelbot-azure-rust-lang2.sh 2>&1 | logger --tag cancelbot-azure-rust-lang2
-
-# synchronizing mailgun every 5 minutes
-*/5 * * * * root /src/bin/sync-mailgun.sh 2>&1 | logger --tag sync-mailgun
-
-# synchronizing github teams every 5 minutes
-*/5 * * * * root /src/bin/sync-github.sh 2>&1 | logger --tag sync-github
