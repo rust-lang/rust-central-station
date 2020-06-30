@@ -51,6 +51,8 @@ secret = "{{ homu.repo-secrets.rust }}"
 [repo.rust.checks.azure]
 name = "fork-auto"
 try_name = "fork-try"
+[repo.rust.checks.actions]
+name = "bors build finished"
 
 # Automatic relabeling
 [repo.rust.labels.approved]   # after homu received `r+`
