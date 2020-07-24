@@ -282,6 +282,21 @@ secret = "{{ homu.repo-secrets.crates-io }}"
 [repo.crates-io.checks.travis]
 name = "Travis CI - Branch"
 
+[repo.chalk]
+owner = "rust-lang"
+name = "chalk"
+timeout = 1800
+
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
+try_users = []
+
+[repo.chalk.github]
+secret = "{{ homu.repo-secrets.chalk }}"
+[repo.chalk.checks.actions]
+name = "bors build finished"
+
 [repo.rustlings]
 owner = "rust-lang"
 name = "rustlings"
