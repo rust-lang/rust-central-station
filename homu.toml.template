@@ -252,6 +252,21 @@ name = "bors dev test finished"
 [repo.clippy.checks.action_remark_test]
 name = "bors remark test finished"
 
+[repo.vscode-rust]
+owner = "rust-lang"
+name = "vscode-rust"
+timeout = 1800
+
+# Permissions managed through rust-lang/team
+rust_team = true
+reviewers = []
+try_users = []
+
+[repo.vscode-rust.github]
+secret = "{{ homu.repo-secrets.vscode-rust }}"
+[repo.vscode-rust.checks.actions]
+name = "bors build finished"
+
 [repo.rls]
 owner = "rust-lang"
 name = "rls"
