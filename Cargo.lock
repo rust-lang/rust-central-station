@@ -187,7 +187,7 @@ name = "curl"
 version = "0.4.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "curl-sys 0.4.33+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl-sys 0.4.34+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.74 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl-probe 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl-sys 0.9.58 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -198,7 +198,7 @@ dependencies = [
 
 [[package]]
 name = "curl-sys"
-version = "0.4.33+curl-7.71.1"
+version = "0.4.34+curl-7.71.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cc 1.0.58 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1247,7 +1247,7 @@ dependencies = [
 "checksum crossbeam-queue 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "774ba60a54c213d409d5353bda12d49cd68d14e45036a285234c8d6f91f92570"
 "checksum crossbeam-utils 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)" = "c3c7c73a2d1e9fc0886a08b93e98eb643461230d5f1925e4036204d5f2e261a8"
 "checksum curl 0.4.31 (registry+https://github.com/rust-lang/crates.io-index)" = "9447ad28eee2a5cfb031c329d46bef77487244fff6a724b378885b8691a35f78"
-"checksum curl-sys 0.4.33+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3e9818ea018327f79c811612f29b9834d2abddbe7db81460a2d5c7e12946b337"
+"checksum curl-sys 0.4.34+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ad4eff0be6985b7e709f64b5a541f700e9ad1407190a29f4884319eb663ed1d6"
 "checksum dbghelp-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "97590ba53bcb8ac28279161ca943a924d1fd4a8fb3fa63302591647c4fc5b850"
 "checksum digest 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f3d0c8c8752312f9713efd397ff63acb9f85585afbf179282e720e7704954dd5"
 "checksum error-chain 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "bd5c82c815138e278b8dcdeffc49f27ea6ffb528403e9dea4194f2e3dd40b143"
