@@ -414,21 +414,41 @@ upload-addr = \"{}/{}\"
         // Construct path to rustc documentation.
         let tarball_prefix = format!("rustc-docs-{}-{}", version, target);
         let tarball = format!("{}.tar.gz", self.dl_dir().join(&tarball_prefix).display());
-        // Construct the path that contains the documentation inside the tarball.
-        let tarball_dir = format!("{}/rustc-docs/share/doc/rust/html", tarball_prefix);
 
         // Only create and unpack rustc docs if artefacts include tarball.
         if Path::new(&tarball).exists() {
             let rustc_docs = docs.join("nightly-rustc");
             t!(fs::create_dir_all(&rustc_docs));
 
-            // Unpack the rustc documentation into the new directory.
-            run(Command::new("tar")
-                        .arg("xf")
-                        .arg(&tarball)
-                        .arg("--strip-components=6")
-                        .arg(&tarball_dir)
-                        .current_dir(&rustc_docs));
+            // Construct the path that contains the documentation inside the tarball.
+            let tarball_dir = format!("{}/rustc-docs/share/doc/rust/html", tarball_prefix);
+            let tarball_dir_new = format!("{}/rustc", tarball_dir);
+
+            if t!(Command::new("tar")
+                .arg("tf")
+                .arg(&tarball)
+                .arg(&tarball_dir_new)
+                .current_dir(&rustc_docs)
+                .output())
+                .status
+                .success() {
+                // Unpack the rustc documentation into the new directory.
+                run(Command::new("tar")
+                    .arg("xf")
+                    .arg(&tarball)
+                    .arg("--strip-components=7")
+                    .arg(&tarball_dir_new)
+                    .current_dir(&rustc_docs));
+            } else {
+                // Unpack the rustc documentation into the new directory.
+                run(Command::new("tar")
+                    .arg("xf")
+                    .arg(&tarball)
+                    .arg("--strip-components=6")
+                    .arg(&tarball_dir)
+                    .current_dir(&rustc_docs));
+            }
+
         }
 
         // Upload this to `/doc/$channel`
