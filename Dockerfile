@@ -24,7 +24,8 @@ RUN apt-get update -y && \
       file \
       ssmtp \
       locales \
-      zlib1g-dev
+      zlib1g-dev \
+      ninja-build
 
 # Set the system locales
 RUN locale-gen en_US.UTF-8
