@@ -507,10 +507,7 @@ upload-addr = \"{}/{}\"
         let json = json!({
             "Paths": {
                 "Items": [
-                    "/dist/channel*",
-                    "/dist/rust*",
-                    "/dist/index*",
-                    "/dist/",
+                    "/dist/*",
                 ],
                 "Quantity": 4,
             },
