@@ -377,6 +377,8 @@ try_users = []
 auto = "auto"
 [repo.miri.github]
 secret = "{{ homu.repo-secrets.miri }}"
+[repo.miri.checks.actions]
+name = "bors build finished"
 [repo.miri.checks.travis]
 name = "Travis CI - Branch"
 [repo.miri.status.appveyor]
