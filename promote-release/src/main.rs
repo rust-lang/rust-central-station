@@ -8,6 +8,7 @@ extern crate tar;
 extern crate toml;
 extern crate xz2;
 
+use std::collections::HashMap;
 use std::env;
 use std::fs::{self, File, OpenOptions};
 use std::io::{self, Read, Write};
@@ -53,6 +54,7 @@ fn main() {
 impl Context {
     fn run(&mut self) {
         let _lock = self.lock();
+        self.backfill_major_minor_channels();
         self.update_repo();
 
         let override_var = env::var("PROMOTE_RELEASE_OVERRIDE_BRANCH");
@@ -577,6 +579,53 @@ upload-addr = \"{}/{}\"
         }
         assert_eq!(t!(self.handle.response_code()), 200);
         t!(t!(String::from_utf8(result)).parse())
+    }
+
+    // This function can be removed after it has been run successfully at least once in the
+    // production environment such that a manifest exists for every 1.x stable version. It is
+    // idempontent and safe to run more than once.
+    fn backfill_major_minor_channels(&mut self) {
+        let bucket = self.secrets["dist"]["upload-bucket"].as_str().unwrap();
+        let dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
+
+        // All the Rust versions that have had non-zero patch releases
+        let minor_versions_with_patch_releases: HashMap<u8, u8> = vec![
+            (12, 1),
+            (15, 1),
+            (22, 1),
+            (24, 1),
+            (26, 2),
+            (27, 2),
+            (29, 2),
+            (30, 1),
+            (31, 1),
+            (34, 2),
+            (41, 1),
+            (43, 1),
+            (44, 1),
+            (45, 2),
+        ]
+        .into_iter()
+        .collect();
+
+        for minor in 0..=47 {
+            let last_patch = minor_versions_with_patch_releases
+                .get(&minor)
+                .copied()
+                .unwrap_or(0);
+            let src = format!(
+                "s3://{}/{}/channel-rust-1.{}.{}.toml",
+                bucket, dir, minor, last_patch
+            );
+            let dst = format!("s3://{}/{}/channel-rust-1.{}.toml", bucket, dir, minor);
+
+            run(self
+                .aws_s3()
+                .arg("cp")
+                .arg("--only-show-errors")
+                .arg(&src)
+                .arg(&dst));
+        }
     }
 }
 
