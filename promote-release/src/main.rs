@@ -128,6 +128,18 @@ impl Context {
             return println!("found rev in previous version, skipping");
         }
 
+        // During normal operations we don't want multiple releases to happen on the same channel
+        // in the same day. This check prevents that, and it can be skipped by setting an
+        // environment variable if the person doing the release really wants that.
+        if std::env::var("PROMOTE_RELEASE_ALLOW_MULTIPLE_TODAY").is_err() && self.dated_manifest_exists() {
+            println!(
+                "another release on the {} channel was done today ({})",
+                self.release, self.date
+            );
+            println!("set PROMOTE_RELEASE_ALLOW_MULTIPLE_TODAY=1 to bypass the check");
+            return;
+        }
+
         // We may still not do a release if the version number hasn't changed.
         // To learn about the current branch's version number we download
         // artifacts and look inside.
@@ -507,10 +519,7 @@ upload-addr = \"{}/{}\"
         let json = json!({
             "Paths": {
                 "Items": [
-                    "/dist/channel*",
-                    "/dist/rust*",
-                    "/dist/index*",
-                    "/dist/",
+                    "/dist/*",
                 ],
                 "Quantity": 4,
             },
@@ -555,7 +564,37 @@ upload-addr = \"{}/{}\"
            .env("AWS_SECRET_ACCESS_KEY", &secret);
     }
 
+    fn dated_manifest_exists(&mut self) -> bool {
+        self.handle.reset();
+        t!(self.handle.get(true));
+        let addr = self.secrets["dist"]["upload-addr"].as_str().unwrap();
+        let upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
+        let url = format!("{}/{}/{}/channel-rust-{}.toml",
+                          addr,
+                          upload_dir,
+                          self.date,
+                          self.release);
+        println!("checking if manifest exists: {}", url);
+        t!(self.handle.url(&url));
+        let mut result = Vec::new();
+        {
+            let mut t = self.handle.transfer();
+
+            t!(t.write_function(|data| {
+                result.extend_from_slice(data);
+                Ok(data.len())
+            }));
+            t!(t.perform());
+        }
+        match t!(self.handle.response_code()) {
+            200 => true,
+            404 => false,
+            other => panic!("unexpected response code: {}", other),
+        }
+    }
+
     fn download_manifest(&mut self) -> toml::Value {
+        self.handle.reset();
         t!(self.handle.get(true));
         let addr = self.secrets["dist"]["upload-addr"].as_str().unwrap();
         let upload_dir = self.secrets["dist"]["upload-dir"].as_str().unwrap();
