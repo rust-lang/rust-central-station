@@ -215,22 +215,6 @@ name = "Travis CI - Branch"
 [repo.compiler-builtins.status.appveyor]
 context = "continuous-integration/appveyor/branch"
 
-
-[repo.crater]
-owner = "rust-lang"
-name = "crater"
-timeout = 5400
-
-# Permissions managed through rust-lang/team
-rust_team = true
-reviewers = []
-try_users = []
-
-[repo.crater.github]
-secret = "{{ homu.repo-secrets.crater }}"
-[repo.crater.checks.actions]
-name = "bors build finished"
-
 [repo.clippy]
 owner = "rust-lang"
 name = "rust-clippy"
