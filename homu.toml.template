@@ -149,12 +149,12 @@ secret = "{{ homu.repo-secrets.libc }}"
 
 [repo.libc.checks.actions]
 name = "bors build finished"
-[repo.libc.checks.cirrus-freebsd-10]
-name = "nightly x86_64-unknown-freebsd-10"
 [repo.libc.checks.cirrus-freebsd-11]
 name = "stable x86_64-unknown-freebsd-11"
 [repo.libc.checks.cirrus-freebsd-12]
 name = "nightly x86_64-unknown-freebsd-12"
+[repo.libc.checks.cirrus-freebsd-13]
+name = "nightly x86_64-unknown-freebsd-13"
 
 [repo.stdarch]
 owner = "rust-lang"
