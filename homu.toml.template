@@ -149,12 +149,18 @@ secret = "{{ homu.repo-secrets.libc }}"
 
 [repo.libc.checks.actions]
 name = "bors build finished"
-[repo.libc.checks.cirrus-freebsd-10]
-name = "nightly x86_64-unknown-freebsd-10"
 [repo.libc.checks.cirrus-freebsd-11]
 name = "stable x86_64-unknown-freebsd-11"
 [repo.libc.checks.cirrus-freebsd-12]
 name = "nightly x86_64-unknown-freebsd-12"
+[repo.libc.checks.cirrus-freebsd-13]
+name = "nightly x86_64-unknown-freebsd-13"
+[repo.libc.labels.approved]   # after homu received `r+`
+remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
+add = ['S-waiting-on-bors']
+[repo.libc.labels.failed]     # test failed (maybe spurious, so fall back to -on-review)
+remove = ['S-blocked', 'S-waiting-on-author', 'S-waiting-on-bors', 'S-waiting-on-review']
+add = ['S-waiting-on-review']
 
 [repo.stdarch]
 owner = "rust-lang"
