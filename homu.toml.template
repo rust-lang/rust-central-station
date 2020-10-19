@@ -31,3 +31,5 @@ ssh_key = """
 
 host = '127.0.0.1'
 port = 7942
+
+[repo]
