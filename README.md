@@ -1,3 +1,18 @@
+# Archived repository!
+
+This repository was the home of some of the most important services hosted by
+the Rust Infrastructure Team, but over time those services were moved to new
+homes:
+
+* The release process is now developed and deployed in [rust-lang/promote-release].
+* Bors is now developed, configured and deployed in [rust-lang/homu].
+* Team synchronization is now developed and deployed in [rust-lang/sync-team].
+* Cancelbot is not in use anymore.
+
+[rust-lang/promote-release]: https://github.com/rust-lang/promote-release
+[rust-lang/homu]: https://github.com/rust-lang/homu
+[rust-lang/sync-team]: https://github.com/rust-lang/sync-team
+
 # Rust Central Station
 
 Or otherwise just another name for the old buildmaster.
